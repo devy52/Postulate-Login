@@ -17,6 +17,11 @@
          alt="Create React App version" />
   </a>
   
+  <a href="https://github.com/devy52/Login/pulls">
+    <img src="https://badgen.net/github/prs/devy52/Login" alt="Pull Request Amount">
+  </a>
+  <img src="https://badgen.net/github/last-commit/devy52/Login" alt="Last commit date" />
+            
   <a href="./LICENSE">
     <img src="https://badgen.net/badge/license/MIT/blue"
          alt="License">

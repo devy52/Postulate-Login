@@ -1,9 +1,9 @@
 import React from "react";
 import theme from "theme";
-import { Theme, Link, Text, List, Box, Section, Input, Structure } from "@quarkly/widgets";
+import { Theme, Link, Text, List, Box, Section } from "@quarkly/widgets";
 import { Helmet } from "react-helmet";
 import { GlobalQuarklyPageStyles } from "global-page-styles";
-import { RawHtml, Override } from "@quarkly/components";
+import { RawHtml } from "@quarkly/components";
 export default (() => {
 	return <Theme theme={theme}>
 		<GlobalQuarklyPageStyles pageUrl={"index"} />
@@ -79,66 +79,7 @@ export default (() => {
 				</List>
 			</Box>
 		</Section>
-		<Section background="--color-darkL2" padding="60px 0" sm-padding="40px 0">
-			<Box margin="-16px -16px -16px -16px" padding="16px 16px 16px 16px" display="flex" flex-wrap="wrap">
-				<Box padding="16px 16px 16px 16px" width="50%" lg-width="100%">
-					<Box
-						background="url(https://wallpaperaccess.com/full/1905877.jpg) 20% 15%/cover"
-						padding="0px 0px 672px 0px"
-						margin="0px -112px 0px 0px"
-						lg-margin="0px 0px 0px 0px"
-						sm-padding="0px 0px 400px 0px"
-					/>
-				</Box>
-				<Box width="50%" display="flex" padding="16px 16px 0px 16px" lg-width="100%">
-					<Box
-						padding="98px 64px 98px 64px"
-						mix-blend-mode="lighten"
-						background="--color-red"
-						margin="36px 0px -20px -112px"
-						display="flex"
-						flex-direction="column"
-						color="--light"
-						lg-margin="0px 0px 0px 0px"
-						lg-width="100%"
-						sm-padding="64px 32px 64px 32px"
-					>
-						<Structure display="grid" width="auto">
-							<Override slot="Content">
-								<Override slot="cell-0">
-									<Text margin="0px 0px 0px 0px">
-										Some text
-									</Text>
-								</Override>
-								<Override slot="cell-1">
-									<Input display="block" placeholder-color="LightGray" background="white" />
-								</Override>
-								<Override slot="cell-2">
-									<Text margin="0px 0px 0px 0px">
-										Some text
-									</Text>
-								</Override>
-								<Override slot="cell-3">
-									<Input display="block" placeholder-color="LightGray" background="white" />
-								</Override>
-							</Override>
-						</Structure>
-						<Text
-							as="h4"
-							margin="0"
-							font="--base"
-							letter-spacing="1px"
-							text-transform="uppercase"
-						>
-							About me
-						</Text>
-						<Text as="p" margin="16px 0" font="--base" max-width="400px">
-							d
-						</Text>
-					</Box>
-				</Box>
-			</Box>
-		</Section>
+		<Section background="url(https://wallpaperaccess.com/full/1905877.jpg) 20% 15%/cover" padding="60px 0" sm-padding="40px 0" height="556px" />
 		<Section background-color="--dark" text-align="center" padding="32px 0" quarkly-title="Footer-1">
 			<List
 				margin="0px 0px 0px 0px"
@@ -197,6 +138,7 @@ export default (() => {
 			</Link>
 		</Section>
 		<Box min-width="100px" min-height="100px" position="fixed" />
+		<Box min-width="100px" min-height="100px" />
 		<Link
 			font={"--capture"}
 			font-size={"10px"}
