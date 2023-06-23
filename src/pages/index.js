@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import theme from "theme";
-import { Theme, Link, Text, List, Box, Section, Icon } from "@quarkly/widgets";
+import { Theme, Link, Text, List, Box, Section} from "@quarkly/widgets";
 import { Helmet } from "react-helmet";
 import { GlobalQuarklyPageStyles } from "global-page-styles";
 import { RawHtml } from "@quarkly/components";
-import { MdVisibility, MdVisibilityOff } from "react-icons/md";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+
 export default (() => {
 	const [showPassword, setShowPassword] = useState(false);
   const [rippleList, setRippleList] = useState([]);
@@ -148,6 +151,7 @@ export default (() => {
 			className="mailin"
         	/>
 			<label className="pass">Password</label>
+      <div className="passcon">
         	<input
           	type={showPassword ? "text" : "password"}
           	placeholder="Password"
@@ -158,19 +162,15 @@ export default (() => {
 			height={"200"}
 			className="passe"
         	/>
-			<Icon
-              category="md"
-              icon={showPassword ? <MdVisibilityOff /> : <MdVisibility />}
-              size="24px"
-              color="#f70a0a"
-              position="absolute"
-              right="4px"
-              top="70%"
-              transform="translateY(-50%)"
-              onClick={() => setShowPassword((prevShowPassword) => !prevShowPassword)}
-              cursor="pointer"
-			  className="icon visible-icon"
-            />
+			<FontAwesomeIcon
+  icon={showPassword ? faEye : faEyeSlash}
+  size="lg"
+  color="#818181"
+  onClick={() => setShowPassword((prevShowPassword) => !prevShowPassword)}
+  className="icon visible-icon"
+/>
+</div>
+
         	<button
         type="submit"
         className="ripple-btn"
