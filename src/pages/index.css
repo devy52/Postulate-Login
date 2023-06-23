@@ -10,6 +10,7 @@
     color: aliceblue;
     text-transform: uppercase;
     overflow: hidden;
+    cursor: pointer;
   }
   
   .ripple-btn .ripple {
@@ -71,10 +72,8 @@ input{
 	font-size: 1rem;
 }
 .visible-icon{
-    opacity: 1;
+    cursor: pointer;
 }
-.visible-icon{
-    display: flex;
-    position: relative;
-    z-index: 9999;
+.passcon{
+    display:flex;
 }
