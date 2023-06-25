@@ -1,7 +1,8 @@
 import React from "react";
-import Index from "pages/index";
-import Page404 from "pages/page404";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Index from "./pages/index";
+import Page404 from "./pages/page404";
+import Signup from "./pages/signup";
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
@@ -12,13 +13,17 @@ const GlobalStyles = createGlobalStyle`
     }
 `;
 
-export default () => (
-    <Router>
-        <GlobalStyles />
-        <Switch>
-        			<Route exact path='/' component={Index}/>
-			<Route exact path='/index' component={Index}/>
-			<Route component={Page404}/>
-        </Switch>
-    </Router>
+const App = () => (
+  <Router>
+    <GlobalStyles />
+    <Switch>
+      <Route path="/" exact component={Index} />
+      <Route path="/index" component={Index} />
+      <Route path="/signup" component={Signup} />
+      <Route component={Page404} />
+      <Redirect to="/" />
+    </Switch>
+  </Router>
 );
+
+export default App;
