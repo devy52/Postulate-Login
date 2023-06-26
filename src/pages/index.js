@@ -65,7 +65,7 @@ const Index = () => {
 					display="flex"
 				>
 					<Link
-						to="/"
+						to="/home"
 						className="nl"
 					>
 						Home
