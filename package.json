@@ -1,24 +1,28 @@
 {
     "name": "quarkly-export",
     "dependencies": {
+        "@fortawesome/fontawesome-svg-core": "^6.4.0",
+        "@fortawesome/free-solid-svg-icons": "^6.4.0",
+        "@fortawesome/react-fontawesome": "^0.2.0",
+        "@quarkly/atomize": "1.0.20",
+        "@quarkly/components": "0.2.75",
+        "@quarkly/widgets": "0.2.75",
         "@testing-library/jest-dom": "^4.2.4",
         "@testing-library/react": "^9.3.2",
         "@testing-library/user-event": "^7.1.2",
-        "react-scripts": "^3.4.0",
-        "react-helmet": "latest",
+        "axios": "^1.4.0",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
-        "@quarkly/widgets": "0.2.75",
-        "@quarkly/components": "0.2.75",
-        "@quarkly/atomize": "1.0.20",
-        "styled-components": "^5.0.1",
-        "react-router-dom": "^5.1.2",
+        "react-helmet": "latest",
+        "react-icons": "^3.9.0",
+        "react-router-dom": "^5.3.4",
         "react-router-hash-link": "^1.2.2",
-        "react-icons": "^3.9.0"
+        "react-scripts": "^3.4.0",
+        "styled-components": "^5.0.1"
     },
     "scripts": {
-        "start": "react-scripts start",
-        "build": "npm run sitemap && CI=false react-scripts build",
+        "start": "react-scripts --openssl-legacy-provider start",
+        "build": "react-scripts --openssl-legacy-provider build",
         "build:ci": "cross-env CI=false npm run build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
@@ -49,8 +53,9 @@
         "@babel/preset-react": "^7.13.13",
         "@babel/register": "^7.13.16",
         "babel-plugin-module-resolver": "^4.1.0",
+        "cross-env": "^7.0.3",
         "react-router-sitemap": "^1.2.0",
-        "cross-env": "^7.0.3"
+        "webpack-cli": "^5.1.4"
     },
     "version": "0.1.0",
     "private": true

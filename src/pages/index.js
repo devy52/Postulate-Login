@@ -65,7 +65,7 @@ const Index = () => {
 					display="flex"
 				>
 					<Link
-						to="/home"
+						to="/"
 						className="nl"
 					>
 						Home
@@ -77,7 +77,7 @@ const Index = () => {
 						About
 					</Link>
 					<Link
-						to="/signup"
+						to="/index"
 						className="navbtn"
 					>
 						LOGIN
@@ -176,19 +176,19 @@ const Index = () => {
 				justify-content="center"
 			>
 				<Link
-					to="#"
+					to="/"
 					className="nl1"
 				>
 					About
 				</Link>
 				<Link
-					to="#"
+					to="/"
 					className="nl1"
 				>
 					Services
 				</Link>
 				<Link
-					to="#"
+					to="/"
 					className="nl1"
 				>
 					Contacts

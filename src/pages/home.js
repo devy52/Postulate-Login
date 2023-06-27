@@ -1,10 +1,12 @@
 import React from "react";
 import theme from "theme";
-import { Theme, Link, Text, List, Box, Section, Icon } from "@quarkly/widgets";
+import { Theme, Link as QLink, Text, List, Box, Section, Icon } from "@quarkly/widgets";
 import { Helmet } from "react-helmet";
 import { GlobalQuarklyPageStyles } from "global-page-styles";
 import { RawHtml } from "@quarkly/components";
 import { FaPlaneDeparture, FaClipboardList, FaBookOpen } from "react-icons/fa";
+import {Link } from "react-router-dom";
+import "./home.css";
 export default (() => {
 	return <Theme theme={theme}>
 		<GlobalQuarklyPageStyles pageUrl={"index"} />
@@ -27,7 +29,7 @@ export default (() => {
 				<Text margin="0" md-margin="0px 0 20px 0" text-align="left" font="normal 900 50px/1.5 --fontFamily-googleTeko">
 					JOURNEY DIARIES
 				</Text>
-				<Link href="#" color="#000000" />
+				<Link to="#" color="#000000" />
 				<List
 					margin="0px 0px 0px 0px"
 					padding="0px 0px 0px 20px"
@@ -38,59 +40,26 @@ export default (() => {
 					display="flex"
 				>
 					<Link
-						href="#"
-						color="#000000"
-						padding="8px 12px 6px 12px"
-						text-decoration-line="initial"
-						display="flex"
-						font="30px/30px --fontFamily-googleTeko"
-						hover-color="--lightD2"
-						transition="background-color 0.1s ease 0s"
+						to="/"
+						className="nl"
 					>
 						Home
 					</Link>
 					<Link
-						href="#"
-						color="#000000"
-						padding="8px 12px 6px 12px"
-						text-decoration-line="initial"
-						display="flex"
-						font="30px/30px --fontFamily-googleTeko"
-						hover-color="--lightD2"
-						transition="background-color 0.1s ease 0s"
+						to="/"
+						className="nl"
 					>
 						About
 					</Link>
 					<Link
-						href="#"
-						color="white"
-						padding="6px 12px 6px 12px"
-						text-decoration-line="initial"
-						display="flex"
-						font="30px/30px --fontFamily-googleTeko"
-						hover-color="--lightD2"
-						transition="background-color 0.1s ease 0s"
-						background="#3468d3"
-						border-style="solid"
-						border-width="2px"
-						hover-background="#898c96"
+						to="/index"
+						className="navbtn"
 					>
 						LOGIN
 					</Link>
 					<Link
-						href="#"
-						color="white"
-						padding="6px 12px 6px 12px"
-						margin-left="0.4em"
-						text-decoration-line="initial"
-						display="flex"
-						font="30px/30px --fontFamily-googleTeko"
-						hover-color="--lightD2"
-						transition="background-color 0.1s ease 0s"
-						background="#3468d3"
-						border-style="solid"
-						border-width="2px"
-						hover-background="#898c96"
+						to="/signup"
+						className="navbtn"
 					>
 						REGISTER
 					</Link>
@@ -249,43 +218,25 @@ export default (() => {
 				justify-content="center"
 			>
 				<Link
-					href="#"
-					color="white"
-					padding="6px 12px 6px 12px"
-					text-decoration-line="initial"
-					display="flex"
-					font="20px/30px sans-serif"
-					hover-color="--lightD2"
-					transition="background-color 0.1s ease 0s"
+					to="#"
+					className="nl1"
 				>
 					About
 				</Link>
 				<Link
-					href="#"
-					color="white"
-					padding="6px 12px 6px 12px"
-					text-decoration-line="initial"
-					display="flex"
-					font="20px/30px sans-serif"
-					hover-color="--lightD2"
-					transition="background-color 0.1s ease 0s"
+					to="#"
+					className="nl1"
 				>
 					Services
 				</Link>
 				<Link
-					href="#"
-					color="white"
-					padding="6px 12px 6px 12px"
-					text-decoration-line="initial"
-					display="flex"
-					font="20px/30px sans-serif"
-					hover-color="--lightD2"
-					transition="background-color 0.1s ease 0s"
+					to="#"
+					className="nl1"
 				>
 					Contacts
 				</Link>
 			</List>
-			<Link
+			<QLink
 				href="mailto:hello@company.com"
 				text-decoration-line="none"
 				variant="--base"
@@ -293,7 +244,7 @@ export default (() => {
 				hover-color="--primary"
 			>
 				hello@company.com
-			</Link>
+			</QLink>
 		</Section>
 		<Link
 			font={"--capture"}

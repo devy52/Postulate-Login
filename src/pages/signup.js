@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import {useNavigate} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
 const Signup = () => {
   const [data,setData] = useState({
@@ -8,7 +8,7 @@ const Signup = () => {
     password:""
   });
 
-const navigate = useNavigate();
+const history = useHistory();
 
 const handleChange = ({currentTarget:input})=>{
   setData({...data,[input.name]:input.value});
@@ -19,7 +19,7 @@ const handleSubmit = async(e) => {
   try{
     const url = "http://localhost:8080/api/user"
     const {data:res} =await axios.post(url,data);
-    navigate("./index");
+    history.push("./index");
     console.log(res.message);
   }
   catch(error){
