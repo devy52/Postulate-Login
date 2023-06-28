@@ -3,47 +3,49 @@ import axios from "axios";
 import {useHistory} from "react-router-dom";
 
 const Signup = () => {
-  const [data,setData] = useState({
-    email:"",
-    password:""
-  });
+  const [email,setEmail]=useState('')
+  const [password,setPassword]=useState('')
 
-const history = useHistory();
+  async function registeruser() {
+    const response = await fetch('http://localhost:2000/api/register',{
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body:JSON.stringify({
+        email,
+        password
+      }),
+    })
 
-const handleChange = ({currentTarget:input})=>{
-  setData({...data,[input.name]:input.value});
-}
-
-const handleSubmit = async(e) => {
-  e.preventDefault();
-  try{
-    const url = "http://localhost:8080/api/user"
-    const {data:res} =await axios.post(url,data);
-    history.push("./index");
-    console.log(res.message);
+    const data =await response.json()
+    console.log(data)
   }
-  catch(error){
-
-  }
-}
 
   return (
     <div>
       <h1>Signup Page</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={registeruser}>
                 {/* Labels and inputs for form data */}
  
         <label className="label">Email</label>
-        <input type="email" />
+        <input 
+          type="email"
+          value={email}
+          onChange={(e)=>SVGAnimateTransformElement(e.target.value)}
+        />
         {/* <input name='email' onChange={handleEmail} className="input"
             value={data.email} type="email" /> */}
  
         <label className="label">Password</label>
-        <input type="password" />
+        <input 
+          type="password" 
+          value={password}
+          onChange={(e)=>setPassword(e.target.value)}
+        />
         {/* <input name='password' onChange={handlePassword} className="input"
             value={data.password} type="password" /> */}
         <button
-                type="submit">
+                type="submit" value="Register">
             Submit
         </button>
         {/* <button onClick={handleSubmit} className="btn"
