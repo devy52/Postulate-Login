@@ -13,6 +13,33 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 const Index = () => {
 	const [showPassword, setShowPassword] = useState(false);
   const [rippleList, setRippleList] = useState([]);
+  const [email,setEmail]=useState('')
+  const [password,setPassword]=useState('')
+
+  async function loginuser(event) {
+	event.preventDefault()
+
+	const response = await fetch('http://localhost:2000/api/login', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			email,
+			password,
+		}),
+	})
+
+	const data = await response.json()
+
+	if (data.user) {
+		localStorage.setItem('token', data.user)
+		alert('Login successful')
+		window.location.href = '/fp'
+	} else {
+		alert('Please check your username and password')
+	}
+}
 
   const createRipple = (e) => {
     const button = e.currentTarget;
@@ -98,7 +125,7 @@ const Index = () => {
     			align-items="center"
     			height="100%"
   			>
-    		<form>
+    		<form onSubmit={loginuser}>
 				
       		<Box
         		display="flex"
@@ -118,6 +145,8 @@ const Index = () => {
           	border-radius="4px"
           	border="1px solid #cccccc"
 			className="mailin"
+			value={email}
+			onChange={(e)=>setEmail(e.target.value)}
         	/>
 			<label className="pass">Password</label>
       <div className="passcon">
@@ -130,6 +159,8 @@ const Index = () => {
           	border="1px solid #cccccc"
 			height={"200"}
 			className="passe"
+			value={password}
+			onChange={(e)=>setPassword(e.target.value)}
         	/>
 			<FontAwesomeIcon
   icon={showPassword ? faEye : faEyeSlash}
@@ -144,6 +175,7 @@ const Index = () => {
         type="submit"
         className="ripple-btn"
         onClick={createRipple}
+		value="Login"
       >
         Login
         {rippleList.map((ripple, index) => (

@@ -1,13 +1,16 @@
 import React, { useState } from "react";
-import axios from "axios";
+//import axios from "axios";
 import {useHistory} from "react-router-dom";
 
 const Signup = () => {
+  const history = useHistory()
   const [email,setEmail]=useState('')
   const [password,setPassword]=useState('')
 
-  async function registeruser() {
+  async function registeruser(event) {
+    event.preventDefault()
     const response = await fetch('http://localhost:2000/api/register',{
+      method:'POST',
       headers:{
         'Content-Type':'application/json',
       },
@@ -18,7 +21,10 @@ const Signup = () => {
     })
 
     const data =await response.json()
-    console.log(data)
+    
+    if(data.status === 'ok'){
+      history.push('/index')
+    }
   }
 
   return (
@@ -31,7 +37,7 @@ const Signup = () => {
         <input 
           type="email"
           value={email}
-          onChange={(e)=>SVGAnimateTransformElement(e.target.value)}
+          onChange={(e)=>setEmail(e.target.value)}
         />
         {/* <input name='email' onChange={handleEmail} className="input"
             value={data.email} type="email" /> */}
