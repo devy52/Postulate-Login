@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
-// Import other dependencies...
 
-const ResetForm = () => {
-  const [password, setPassword] = useState('');
+const Pass = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const history = useHistory();
-  const { token } = useParams();
+  const [password, setPassword] = useState('');
+  const token = localStorage.getItem('token')
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
@@ -18,7 +17,7 @@ const ResetForm = () => {
       return;
     }
 
-    const response = await fetch(`http://localhost:8000/api/reset-password/${token}`, {
+    const response = await fetch(`http://127.0.0.1:2000/api/reset-password/${token}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -65,4 +64,4 @@ const ResetForm = () => {
   );
 };
 
-export default ResetForm;
+export default Pass;

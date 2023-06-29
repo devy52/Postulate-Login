@@ -29,7 +29,7 @@ const App = () => (
       <Route path="/signup" component={Signup} />
       <Route path="/reset" component={Reset} />
       <Route exact path="/reset" component={Reset} />
-      <Route path="/reset/:token" component={Pass} />
+      <Route path="/reset/:token" component={()=><Pass/>} />
       <Route
         path="/fp"
         render={() =>
