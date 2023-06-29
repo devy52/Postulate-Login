@@ -17,26 +17,41 @@ const Reset = () => {
   const [successMessage, setSuccessMessage] = useState('');
 
   const handleResetPassword = async (e) => {
-    e.preventDefault();
-
-    const response = await fetch('http://127.0.0.1:2000/api/reset-password', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email }),
-    });
-
-    const data = await response.json();
-    if (response.ok) {
-        e1.style.display="block"
-      setSuccessMessage('Password reset email sent. Please check your inbox.');
-      setErrorMessage('');
-    } else {
-      e2.style.display="block"
-      setSuccessMessage('');
-      setErrorMessage(data.error);
-    }
+	e.preventDefault();
+  
+	const response = await fetch('http://127.0.0.1:2000/api/reset-password', {
+	  method: 'POST',
+	  headers: {
+		'Content-Type': 'application/json',
+	  },
+	  body: JSON.stringify({ email }),
+	});
+  
+	const data = await response.json();
+	console.log(data)
+	if (response.ok) {
+		if (data.status==='ok') {
+		  e1.style.display = 'block';
+		  console.log('e1')
+		  setSuccessMessage('Password reset email sent. Please check your inbox.');
+		  setErrorMessage('');
+		} else {
+		  e2.style.display = 'block';
+		  setTimeout(() => {
+			e2.style.display = 'none';
+		  }, 1000);
+		  console.log('e21')
+		  setSuccessMessage('');
+		  setErrorMessage('User not found.');
+		}
+	  } else {
+		e2.style.display = 'block';
+		setTimeout(() => {
+		  e2.style.display = 'none';
+		}, 1000);
+		console.log('e22')
+		setErrorMessage(data.error);
+	  }
   };
 
   const createRipple = (e) => {
@@ -52,7 +67,6 @@ const Reset = () => {
 
     setRippleList((prevRipples) => [...prevRipples, newRipple]);
   };
-
 
 
 	return(
@@ -147,8 +161,8 @@ const Reset = () => {
 			value={email}
 			onChange={(e)=>setEmail(e.target.value)}
         	/>
-<label className="err1">User Not Found</label>
-<label className="mailnk">A link has been sent to your registered mail.</label>
+<label className="err1">{errorMessage}</label>
+<label className="mailnk">{successMessage}</label>
 
         	<button
         type="submit"
