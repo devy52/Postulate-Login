@@ -45,7 +45,7 @@ label{
 input{
     font-size: 1.5em;
 }
-.frmbox .head1,.frmbox .lnk{
+.frmbox .head1,.frmbox .lnk,.frmbox .err,.frmbox .reset,.frmbox .err1,.frmbox .mailnk{
     text-align: center;
 }
 .frmbox{
@@ -131,4 +131,33 @@ Link{
 }
 .navbtn:hover{
     color: #898c96;
+}
+.err{
+    margin-top: 1.5em;
+    margin-bottom: -1.5em;
+    font-size: 1.4em;
+    font-weight: 100;
+    background-color: rgb(231, 93, 93);
+    border-radius: 0.2em;
+    display: none;
+}
+.frmbox .reset{
+    color: blue;
+    margin-top: 0em;
+}
+.reset:visited{
+    color: blue;
+}
+.mailnk,.err1{
+    padding: 0.5em;
+    font-size: 1.2em;
+    border-radius: 0.5em;
+}
+.mailnk{
+    background-color: rgb(105, 231, 105);
+    display: none;
+}
+.err1{
+    background-color: rgb(238, 93, 88);
+    display: none;
 }

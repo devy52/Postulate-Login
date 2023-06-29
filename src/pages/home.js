@@ -218,19 +218,19 @@ export default (() => {
 				justify-content="center"
 			>
 				<Link
-					to="#"
+					to="/"
 					className="nl1"
 				>
 					About
 				</Link>
 				<Link
-					to="#"
+					to="/"
 					className="nl1"
 				>
 					Services
 				</Link>
 				<Link
-					to="#"
+					to="/"
 					className="nl1"
 				>
 					Contacts
@@ -246,28 +246,6 @@ export default (() => {
 				hello@company.com
 			</QLink>
 		</Section>
-		<Link
-			font={"--capture"}
-			font-size={"10px"}
-			position={"fixed"}
-			bottom={"12px"}
-			right={"12px"}
-			z-index={"4"}
-			border-radius={"4px"}
-			padding={"5px 12px 4px"}
-			background-color={"--dark"}
-			opacity={"0.6"}
-			hover-opacity={"1"}
-			color={"--light"}
-			cursor={"pointer"}
-			transition={"--opacityOut"}
-			quarkly-title={"Badge"}
-			text-decoration-line={"initial"}
-			href={"https://quarkly.io/"}
-			target={"_blank"}
-		>
-			Made on Quarkly
-		</Link>
 		<RawHtml>
 			<style place={"endOfHead"} rawKey={"64948d1991dc65001840fab9"}>
 				{":root {\n  box-sizing: border-box;\n}\n\n* {\n  box-sizing: inherit;\n}"}

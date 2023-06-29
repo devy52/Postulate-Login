@@ -1,48 +1,43 @@
 import React, { useState } from "react";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import theme from "theme";
 import { Theme, Text, List, Box, Section, Link as QLink} from "@quarkly/widgets";
 import { Helmet } from "react-helmet";
 import { GlobalQuarklyPageStyles } from "global-page-styles";
 import { RawHtml } from "@quarkly/components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 
-const Index = () => {
-	const [showPassword, setShowPassword] = useState(false);
+const Reset = () => {
   const [rippleList, setRippleList] = useState([]);
-  const [email,setEmail]=useState('')
-  const [password,setPassword]=useState('')
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const elem = document.getElementsByClassName("err")[0]
+  const [email, setEmail] = useState('');
+  const e1 = document.getElementsByClassName("mailnk")[0]
+  const e2 = document.getElementsByClassName("err1")[0]
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
-  async function loginuser(event) {
-	event.preventDefault()
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
 
-	const response = await fetch('http://localhost:2000/api/login', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			email,
-			password,
-		}),
-	})
+    const response = await fetch('http://127.0.0.1:2000/api/reset-password', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    });
 
-	const data = await response.json()
-
-	if (data.user) {
-		setIsLoggedIn(true);
-		localStorage.setItem('token', data.user);
-		elem.style.display="none"
-		window.location.href = '/fp';
-	  } else {
-		elem.style.display="block"
-	  }
-}
+    const data = await response.json();
+    if (response.ok) {
+        e1.style.display="block"
+      setSuccessMessage('Password reset email sent. Please check your inbox.');
+      setErrorMessage('');
+    } else {
+      e2.style.display="block"
+      setSuccessMessage('');
+      setErrorMessage(data.error);
+    }
+  };
 
   const createRipple = (e) => {
     const button = e.currentTarget;
@@ -129,7 +124,7 @@ const Index = () => {
     			align-items="center"
     			height="100%"
   			>
-    		<form onSubmit={loginuser}>
+    		<form onSubmit={handleResetPassword}>
 				
       		<Box
         		display="flex"
@@ -139,7 +134,7 @@ const Index = () => {
         	width="400px"
 			className="frmbox"
       		>
-			<label className="head1">Login</label>
+			<label className="head1">Reset Password</label>
 			<label className="mail">Email</label>
         	<input
           	type="email"
@@ -152,29 +147,8 @@ const Index = () => {
 			value={email}
 			onChange={(e)=>setEmail(e.target.value)}
         	/>
-			<label className="pass">Password</label>
-      <div className="passcon">
-        	<input
-          	type={showPassword ? "text" : "password"}
-          	placeholder="Password"
-          	margin-bottom="20px"
-          	padding="10px"
-          	border-radius="4px"
-          	border="1px solid #cccccc"
-			height={"200"}
-			className="passe"
-			value={password}
-			onChange={(e)=>setPassword(e.target.value)}
-        	/>
-			<FontAwesomeIcon
-  icon={showPassword ? faEye : faEyeSlash}
-  size="lg"
-  color="#818181"
-  onClick={() => setShowPassword((prevShowPassword) => !prevShowPassword)}
-  className="icon visible-icon"
-/>
-</div>
-<label className="err">Invalid Credentials</label>
+<label className="err1">User Not Found</label>
+<label className="mailnk">A link has been sent to your registered mail.</label>
 
         	<button
         type="submit"
@@ -182,7 +156,7 @@ const Index = () => {
         onClick={createRipple}
 		value="Login"
       >
-        Login
+        Reset
         {rippleList.map((ripple, index) => (
           <span
             key={index}
@@ -196,8 +170,6 @@ const Index = () => {
           />
         ))}
       </button>
-	  <label className="lnk">New User? <Link to="/signup" className="reglnk">Register</Link></label>
-	  <label className="lnk reset"><Link to="/reset" className="reglnk">Forgot Password</Link></label>
       		</Box>
     		</form>
   			</Box>
@@ -250,4 +222,4 @@ const Index = () => {
 	</Theme>);
 };
 
-export default Index;
+export default Reset;

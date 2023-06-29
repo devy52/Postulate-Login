@@ -24,6 +24,7 @@ const Signup = () => {
     
     if(data.status === 'ok'){
       history.push('/index')
+      localStorage.setItem('token', data.token);
     }
   }
 
