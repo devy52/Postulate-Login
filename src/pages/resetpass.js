@@ -28,34 +28,34 @@ const Reset = () => {
 	});
   
 	const data = await response.json();
-	console.log(data)
+	console.log(data.status)
 	if (response.ok) {
 		if (data.status==='ok') {
-		  e1.style.display = 'block';
-		  setTimeout(() => {
-			e1.style.display = 'none';
-		  }, 1000);
-		  console.log('e1')
-		  setSuccessMessage('Password reset email sent. Please check your inbox.');
-		  setErrorMessage('');
+			setSuccessMessage('Password reset email sent. Please check your inbox.');
+			setErrorMessage('');
+			e1.style.display = 'block';
+			setTimeout(() => {
+			  e1.style.display = 'none';
+			}, 1000);
+			console.log('e21')
 		} else {
+		  setSuccessMessage('');
+		  setErrorMessage('User not found.');
 		  e2.style.display = 'block';
 		  setTimeout(() => {
 			e2.style.display = 'none';
 		  }, 1000);
 		  console.log('e21')
-		  setSuccessMessage('');
-		  setErrorMessage('User not found.');
 		}
 	  } else {
+		setErrorMessage(data.error);
 		e2.style.display = 'block';
 		setTimeout(() => {
 		  e2.style.display = 'none';
 		}, 1000);
 		console.log('e22')
-		setErrorMessage(data.error);
 	  }
-	window.location.reload();
+	//window.location.reload();
   };
 
   const createRipple = (e) => {

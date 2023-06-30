@@ -216,6 +216,7 @@ app.post('/api/posts', authenticateUser, upload.single('file'), (req, res) => {
         if (error) {
           console.log(error);
         } else {
+          return res.json({ status: "ok" });
           console.log("Email sent: " + info.response);
         }
       });
