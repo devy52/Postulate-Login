@@ -19,51 +19,51 @@ const GlobalStyles = createGlobalStyle`
     }
 `;
 
+const App = () => {
+  const isLoggedIn = localStorage.getItem('token');
 
-const App = () => (
-  <Router>
-    <GlobalStyles />
-    <Switch>
-      <Route path="/" exact component={Home} />
-      <Route path="/index" component={Index} />
-      <Route path="/signup" component={Signup} />
-      <Route path="/reset" component={Reset} />
-      <Route exact path="/reset" component={Reset} />
-      <Route path="/reset/:token" component={()=><Pass/>} />
+  return (
+    <Router>
+      <GlobalStyles />
+      <Switch>
       <Route
-        path="/fp"
-        render={() =>
-          localStorage.getItem('token') ? (
-            <FP />
-          ) : (
-            <Redirect to="/index" />
-          )
-        }
-      />
-      <Route
-        path="/cards"
-        render={() =>
-          localStorage.getItem('token') ? (
-            <Cards />
-          ) : (
-            <Redirect to="/index" />
-          )
-        }
-      />
-      <Route
-        path="/make"
-        render={() =>
-          localStorage.getItem('token') ? (
-            <Make />
-          ) : (
-            <Redirect to="/index" />
-          )
-        }
-      />
-      <Route component={Page404} />
-      <Redirect to="/" />
-    </Switch>
-  </Router>
-);
+          path="/index"
+          render={() => (isLoggedIn ? <Redirect to="/fp" /> : <Home />)}
+        />
+        <Route
+          path="/index"
+          render={() => (isLoggedIn ? <Redirect to="/fp" /> : <Index />)}
+        />
+        <Route
+          path="/signup"
+          render={() => (isLoggedIn ? <Redirect to="/fp" /> : <Signup />)}
+        />
+        <Route path="/reset" component={Reset} />
+        <Route exact path="/reset" component={Reset} />
+        <Route path="/reset/:token" component={() => <Pass />} />
+        <Route
+          path="/fp"
+          render={() =>
+            isLoggedIn ? <FP /> : <Redirect to="/index" />
+          }
+        />
+        <Route
+          path="/cards"
+          render={() =>
+            isLoggedIn ? <Cards /> : <Redirect to="/index" />
+          }
+        />
+        <Route
+          path="/make"
+          render={() =>
+            isLoggedIn ? <Make /> : <Redirect to="/index" />
+          }
+        />
+        <Route component={Page404} />
+        <Redirect to="/" />
+      </Switch>
+    </Router>
+  );
+};
 
 export default App;
