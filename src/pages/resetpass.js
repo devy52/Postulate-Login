@@ -19,7 +19,7 @@ const Reset = () => {
   const handleResetPassword = async (e) => {
 	e.preventDefault();
   
-	const response = await fetch('http://127.0.0.1:2000/api/reset-password', {
+	const response = await fetch('http://127.0.0.1:2000/api/forgot-password', {
 	  method: 'POST',
 	  headers: {
 		'Content-Type': 'application/json',
@@ -32,6 +32,9 @@ const Reset = () => {
 	if (response.ok) {
 		if (data.status==='ok') {
 		  e1.style.display = 'block';
+		  setTimeout(() => {
+			e1.style.display = 'none';
+		  }, 1000);
 		  console.log('e1')
 		  setSuccessMessage('Password reset email sent. Please check your inbox.');
 		  setErrorMessage('');

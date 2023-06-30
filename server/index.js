@@ -18,8 +18,20 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use('/uploads', express.static('uploads'));
-app.use(express.static(path.join(__dirname, '../src/pages')));
-app.use(express.static("public"))
+// Serve static files from the build directory
+app.use(express.static(path.join(__dirname, '../build')));
+
+
+const transporter = nodemailer.createTransport({
+  // Configure your email service provider here
+  service: 'Gmail',
+  auth: {
+      user: 'dev522003@gmail.com',
+      pass: 'suzjhtwvbkociqit',
+},
+});
+
+
 
 const storage = multer.diskStorage({
     destination: './uploads',
@@ -179,39 +191,29 @@ app.post('/api/posts', authenticateUser, upload.single('file'), (req, res) => {
   });
   
   // Add a new endpoint to initiate the password reset process
-app.post('/api/reset-password', async (req, res) => {
-    const email = req.body.email;
-    try {
-      const user = await User.findOne({ email: email });
-      if (!user) {
-        return res.json({ status: 'error', error: 'User not found' });
-      }
+
+  app.post('/api/forgot-password', (req, res) => {
+    const { email } = req.body;
   
-      // Generate a password reset token
-      const resetToken = jwt.sign({ email: user.email }, 'abc123', { expiresIn: '1h' });
-      user.resetPasswordToken = resetToken;
-      console.log('Token sent:',resetToken) // Token expires in 1 hour
+    // Check if the email exists in the database
+    User.findOne({ email })
+      .then((user) => {
+        if (!user) {
+          return res.json({ status: 'error', error: 'User not found' });
+        }
   
-      // Save the user with the reset token and expiration time
-      await user.save();
+        // Generate a unique reset token
+        const resetToken = jwt.sign({ email }, 'abcd1234', { expiresIn: '1h' });
   
+        // Send the reset token to the user's email (you need to implement this functionality)
       // Send the password reset email
-      const transporter = nodemailer.createTransport({
-        // Configure your email service provider here
-        service: 'Gmail',
-        auth: {
-            user: 'dev522003@gmail.com',
-            pass: 'suzjhtwvbkociqit',
-  },
-      });
-  
       const mailOptions = {
         from: 'devu44550@gmail.com',
         to: user.email,
         subject: 'Password Reset',
         text: `You are receiving this email because you (or someone else) has requested to reset the password for your account.\n\n` +
           `Please click on the following link, or paste this into your browser to complete the process:\n\n` +
-          `http://${req.headers.host}/reset-password/${resetToken}\n\n` +
+          `http://${req.headers.host}/reset-password?token=${resetToken}\n\n` +
           `If you did not request this, please ignore this email and your password will remain unchanged.\n`,
       };
   
@@ -223,33 +225,74 @@ app.post('/api/reset-password', async (req, res) => {
         console.log('Email sent:', info.response);
         res.json({ status: 'ok' });
       });
-    } catch (error) {
-      console.log('Error resetting password:', error);
-      res.status(500).json({ status: 'error', error: 'Internal server error' });
-    }
+  
+        // Return success message
+        return res.json({ status: 'ok', message: 'Reset token sent successfully' });
+      })
+      .catch((error) => {
+        console.error('Error finding user:', error);
+        res.status(500).json({ message: 'Internal server error' });
+      });
   });
   
   // Add a new endpoint to handle the password reset form submission
-  app.get('/reset-password/:token', async (req, res) => {
-  const token = req.params.token;
-  console.log('Token received:', token);
+  app.get('/api/reset-password', (req, res) => {
+  const {token} = req.query;
   try {
-    const user = await User.findOne({
-      resetPasswordToken: token,
-      resetPasswordExpires: { $gt: Date.now() },
-    });
+    const decoded = jwt.verify(token, 'abcd1234');
+    const email = decoded.email;
 
-    
+    // Store the email in the session
+    req.session.email = email;
 
-    // Render the password reset form
-    res.sendFile(path.join(__dirname, '../src/pages/pass.js'));
+    // Redirect the user to the password reset page (pass.js)
+    return res.redirect(`/pass?email=${encodeURIComponent(email)}`);
   } catch (error) {
-    console.log('Error resetting password:', error);
-    res.status(500).json({ status: 'error', error: 'Internal server error' });
+    console.error('Error verifying reset token:', error);
+    res.status(401).json({ message: 'Invalid or expired reset token' });
   }
 });
 
-  
+app.post('/api/reset-password', async (req, res) => {
+  const { email, password } = req.body;
+
+  // Find the user by email (retrieve it from the session or wherever you stored it)
+
+  User.findOne({ email })
+    .then((user) => {
+      if (!user) {
+        return res.json({ status: 'error', error: 'User not found' });
+      }
+
+      // Update the user's password with the new one
+      bcrypt.hash(password, 10)
+        .then((hashedPassword) => {
+          user.password = hashedPassword;
+          user.save()
+            .then(() => {
+              // Return success message
+              return res.json({ status: 'ok', message: 'Password updated successfully' });
+            })
+            .catch((error) => {
+              console.error('Error updating password:', error);
+              res.status(500).json({ message: 'Internal server error' });
+            });
+        })
+        .catch((error) => {
+          console.error('Error hashing password:', error);
+          res.status(500).json({ message: 'Internal server error' });
+        });
+    })
+    .catch((error) => {
+      console.error('Error finding user:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    });
+});
+
+app.get('/reset-password', (req, res) => {
+  // Render the pass.js file or any other template you want to show for password reset
+  res.sendFile(path.join(__dirname, '../build/index.html'));
+});
 
 
 app.listen(2000, () => {
