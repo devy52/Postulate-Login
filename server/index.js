@@ -19,19 +19,9 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use('/uploads', express.static('uploads'));
 // Serve static files from the build directory
-app.use(express.static(path.join(__dirname, '../build')));
-
-
-const transporter = nodemailer.createTransport({
-  // Configure your email service provider here
-  service: 'Gmail',
-  auth: {
-      user: 'dev522003@gmail.com',
-      pass: 'suzjhtwvbkociqit',
-},
-});
-
-
+app.set("view engine", "ejs");
+app.set('views', path.join(__dirname, 'views'));
+//app.use(express.urlencoded({ extended: false }));
 
 const storage = multer.diskStorage({
     destination: './uploads',
@@ -177,7 +167,7 @@ app.post('/api/posts', authenticateUser, upload.single('file'), (req, res) => {
   app.delete('/api/posts/:postId', authenticateUser, (req, res) => {
     const postId = req.params.postId;
   
-    Post.findOneAndDelete({ id: postId }) // Change _id to id
+    Post.findOneAndDelete({ _id: postId }) // Change _id to id
       .then((deletedPost) => {
         if (!deletedPost) {
           return res.status(404).json({ error: 'Post not found' });
@@ -192,28 +182,41 @@ app.post('/api/posts', authenticateUser, upload.single('file'), (req, res) => {
   
   // Add a new endpoint to initiate the password reset process
 
-  app.post('/api/forgot-password', (req, res) => {
+  app.post('/api/forgot-password', async (req, res) => {
+    console.log("req.body bef:",req.body)
     const { email } = req.body;
-  
+  try{
     // Check if the email exists in the database
-    User.findOne({ email })
-      .then((user) => {
+    const user = await User.findOne({ email })
+    console.log("req.body:",req.body)
+    console.log("req.body._id:",req.body._id)
+    console.log("user:",user._id)
         if (!user) {
           return res.json({ status: 'error', error: 'User not found' });
         }
   
         // Generate a unique reset token
-        const resetToken = jwt.sign({ email }, 'abcd1234', { expiresIn: '1h' });
-  
+        const token = jwt.sign({ email:user.email,id:user._id }, 'abcd1234', { expiresIn: "10m", });
+        console.log(token)
         // Send the reset token to the user's email (you need to implement this functionality)
-      // Send the password reset email
+        
+        const transporter = nodemailer.createTransport({
+          // Configure your email service provider here
+          service: 'gmail',
+          auth: {
+              user: 'dev522003@gmail.com',
+              pass: 'unspfufvlcpzucrh',
+        },
+        });
+
+        // Send the password reset email
       const mailOptions = {
-        from: 'devu44550@gmail.com',
+        from: 'dev522003@gmail.com',
         to: user.email,
         subject: 'Password Reset',
         text: `You are receiving this email because you (or someone else) has requested to reset the password for your account.\n\n` +
           `Please click on the following link, or paste this into your browser to complete the process:\n\n` +
-          `http://${req.headers.host}/reset-password?token=${resetToken}\n\n` +
+          `http://127.0.0.1:2000/reset-password/${user._id}/${token}\n\n` +
           `If you did not request this, please ignore this email and your password will remain unchanged.\n`,
       };
   
@@ -222,77 +225,74 @@ app.post('/api/posts', authenticateUser, upload.single('file'), (req, res) => {
           console.log('Error sending email:', error);
           return res.json({ status: 'error', error: 'Failed to send password reset email' });
         }
-        console.log('Email sent:', info.response);
-        res.json({ status: 'ok' });
+        else{
+          console.log('Email sent:', info.response);
+        }
+        
       });
-  
+      console.log(`http://127.0.0.1:2000/reset-password/${user._id}/${token}`)
         // Return success message
         return res.json({ status: 'ok', message: 'Reset token sent successfully' });
-      })
-      .catch((error) => {
+    }
+      catch(error) {
         console.error('Error finding user:', error);
-        res.status(500).json({ message: 'Internal server error' });
-      });
+        res.status(500).json({ message: 'Internal server error' });}
   });
   
   // Add a new endpoint to handle the password reset form submission
-  app.get('/api/reset-password', (req, res) => {
-  const {token} = req.query;
+  app.get('/api/reset-password/:id/:token', async (req, res) => {
+  const {id,token} = req.params;
+  console.log(req.params);
+  const user = await User.findOne({_id:id});
+  if(!user){
+    return res.json({status:"User Not Exists"})
+  }
   try {
-    const decoded = jwt.verify(token, 'abcd1234');
-    const email = decoded.email;
+    jwt.verify(token, 'abcd1234', (err, decoded) => {
+      if (err) {
+        console.error('Error verifying reset token:', err);
+      }
 
-    // Store the email in the session
-    req.session.email = email;
+      const { email } = decoded;
 
-    // Redirect the user to the password reset page (pass.js)
-    return res.redirect(`/pass?email=${encodeURIComponent(email)}`);
+      res.render('reset-pass', { email, status: 'verified' });
+    });
   } catch (error) {
-    console.error('Error verifying reset token:', error);
-    res.status(401).json({ message: 'Invalid or expired reset token' });
+    console.error('Error resetting password:', error);
+    res.json({ status: 'error', error: 'Invalid or expired reset token' });
   }
 });
 
-app.post('/api/reset-password', async (req, res) => {
-  const { email, password } = req.body;
-
+app.post('/api/reset-password/:id/:token', async (req, res) => {
+  const { id, token } = req.params;
+  const { password } = req.body;
   // Find the user by email (retrieve it from the session or wherever you stored it)
-
-  User.findOne({ email })
-    .then((user) => {
+  const user = await User.findOne({  _id: id })
       if (!user) {
         return res.json({ status: 'error', error: 'User not found' });
       }
-
+      try{
       // Update the user's password with the new one
-      bcrypt.hash(password, 10)
-        .then((hashedPassword) => {
-          user.password = hashedPassword;
-          user.save()
-            .then(() => {
-              // Return success message
-              return res.json({ status: 'ok', message: 'Password updated successfully' });
-            })
-            .catch((error) => {
-              console.error('Error updating password:', error);
-              res.status(500).json({ message: 'Internal server error' });
-            });
-        })
-        .catch((error) => {
-          console.error('Error hashing password:', error);
-          res.status(500).json({ message: 'Internal server error' });
-        });
-    })
-    .catch((error) => {
-      console.error('Error finding user:', error);
-      res.status(500).json({ message: 'Internal server error' });
-    });
+      const verify = jwt.verify(token, 'abcd1234');
+      const encryptedPassword = await bcrypt.hash(password, 10);
+      await User.updateOne(
+        {
+          _id: id,
+        },
+        {
+          $set: {
+            password: encryptedPassword,
+          },
+        }
+      );
+      res.render("reset-pass", { email: verify.email, status: "verified" });
+        }
+        catch(error) {
+          console.log(error);
+    res.json({ status: "Something Went Wrong" });
+        };
 });
 
-app.get('/reset-password', (req, res) => {
-  // Render the pass.js file or any other template you want to show for password reset
-  res.sendFile(path.join(__dirname, '../build/index.html'));
-});
 
 
 app.listen(2000, () => {
