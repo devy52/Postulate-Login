@@ -11,7 +11,6 @@ const bodyParser = require('body-parser');
 const {v4: uuidv4} = require('uuid');
 const Post = require('./models/post.model')
 const nodemailer = require('nodemailer');
-const crypto = require('crypto');
 
 
 app.use(cors());
@@ -22,6 +21,10 @@ app.use('/uploads', express.static('uploads'));
 app.set("view engine", "ejs");
 app.set('views', path.join(__dirname, 'views'));
 //app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
+
+const JWT_SECRET =
+  "hvdvay6ert72839289()aiyg8t87qt72393293883uhefiuh78ttq3ifi78272jbkj?[]]pou89ywe";
 
 const storage = multer.diskStorage({
     destination: './uploads',
@@ -182,97 +185,73 @@ app.post('/api/posts', authenticateUser, upload.single('file'), (req, res) => {
   
   // Add a new endpoint to initiate the password reset process
 
-  app.post('/api/forgot-password', async (req, res) => {
-    console.log("req.body bef:",req.body)
+  app.post("/forgot-password", async (req, res) => {
     const { email } = req.body;
-  try{
-    // Check if the email exists in the database
-    const user = await User.findOne({ email })
-    console.log("req.body:",req.body)
-    console.log("req.body._id:",req.body._id)
-    console.log("user:",user._id)
-        if (!user) {
-          return res.json({ status: 'error', error: 'User not found' });
-        }
-  
-        // Generate a unique reset token
-        const token = jwt.sign({ email:user.email,id:user._id }, 'abcd1234', { expiresIn: "10m", });
-        console.log(token)
-        // Send the reset token to the user's email (you need to implement this functionality)
-        
-        const transporter = nodemailer.createTransport({
-          // Configure your email service provider here
-          service: 'gmail',
-          auth: {
-              user: 'dev522003@gmail.com',
-              pass: 'unspfufvlcpzucrh',
+    try {
+      const oldUser = await User.findOne({ email });
+      if (!oldUser) {
+        return res.json({ status: "User Not Exists!!" });
+      }
+      const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, 'abcd1234', {
+        expiresIn: "5m",
+      });
+      const link = `http://127.0.0.1:2000/reset-password/${oldUser._id}/${token}`; 
+      console.log(link)
+      var transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: "dev522003@gmail.com",
+          pass: "unspfufvlcpzucrh",
         },
-        });
-
-        // Send the password reset email
-      const mailOptions = {
-        from: 'dev522003@gmail.com',
-        to: user.email,
-        subject: 'Password Reset',
-        text: `You are receiving this email because you (or someone else) has requested to reset the password for your account.\n\n` +
-          `Please click on the following link, or paste this into your browser to complete the process:\n\n` +
-          `http://127.0.0.1:2000/reset-password/${user._id}/${token}\n\n` +
-          `If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+      });
+  
+      var mailOptions = {
+        from: "dev522003@gmail.com",
+        to: oldUser.email,
+        subject: "Password Reset",
+        text: link,
       };
   
-      transporter.sendMail(mailOptions, (error, info) => {
+      transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
-          console.log('Error sending email:', error);
-          return res.json({ status: 'error', error: 'Failed to send password reset email' });
+          console.log(error);
+        } else {
+          console.log("Email sent: " + info.response);
         }
-        else{
-          console.log('Email sent:', info.response);
-        }
-        
       });
-      console.log(`http://127.0.0.1:2000/reset-password/${user._id}/${token}`)
-        // Return success message
-        return res.json({ status: 'ok', message: 'Reset token sent successfully' });
-    }
-      catch(error) {
-        console.error('Error finding user:', error);
-        res.status(500).json({ message: 'Internal server error' });}
+      console.log(link);
+    } catch (error) { }
   });
   
-  // Add a new endpoint to handle the password reset form submission
-  app.get('/api/reset-password/:id/:token', async (req, res) => {
-  const {id,token} = req.params;
-  console.log(req.params);
-  const user = await User.findOne({_id:id});
-  if(!user){
-    return res.json({status:"User Not Exists"})
-  }
-  try {
-    jwt.verify(token, 'abcd1234', (err, decoded) => {
-      if (err) {
-        console.error('Error verifying reset token:', err);
-      }
-
-      const { email } = decoded;
-
-      res.render('reset-pass', { email, status: 'verified' });
-    });
-  } catch (error) {
-    console.error('Error resetting password:', error);
-    res.json({ status: 'error', error: 'Invalid or expired reset token' });
-  }
-});
-
-app.post('/api/reset-password/:id/:token', async (req, res) => {
-  const { id, token } = req.params;
-  const { password } = req.body;
-  // Find the user by email (retrieve it from the session or wherever you stored it)
-  const user = await User.findOne({  _id: id })
-      if (!user) {
-        return res.json({ status: 'error', error: 'User not found' });
-      }
-      try{
-      // Update the user's password with the new one
+  app.get("/reset-password/:id/:token", async (req, res) => {
+    const { id, token } = req.params;
+    console.log(req.params);
+    //res.send("Done")
+    const oldUser = await User.findOne({ _id: id });
+    if (!oldUser) {
+      return res.json({ status: "User Not Exists!!" });
+    }
+    try {
+      const verify = jwt.verify(token, 'abcd1234');
+      res.render("reset-pass", { email: verify.email, status: "Not Verified" });
+    } catch (error) {
+      console.log(error);
+      res.send("Not Verified");
+    }
+  });
+  
+  app.post("/reset-password/:id/:token", async (req, res) => {
+    const { id, token } = req.params;
+    const password = req.body.new_password;
+    console.log(req.body)
+    console.log(req.body.new_password)
+    console.log(password)
+  
+    const oldUser = await User.findOne({ _id: id });
+    if (!oldUser) {
+      return res.json({ status: "User Not Exists!!" });
+    }
+    try {
       const verify = jwt.verify(token, 'abcd1234');
       const encryptedPassword = await bcrypt.hash(password, 10);
       await User.updateOne(
@@ -285,13 +264,13 @@ app.post('/api/reset-password/:id/:token', async (req, res) => {
           },
         }
       );
+  
       res.render("reset-pass", { email: verify.email, status: "verified" });
-        }
-        catch(error) {
-          console.log(error);
-    res.json({ status: "Something Went Wrong" });
-        };
-});
+    } catch (error) {
+      console.log(error);
+      //res.json({ status: "Something Went Wrong" });
+    }
+  });
 
 
 

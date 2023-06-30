@@ -19,7 +19,7 @@ const Reset = () => {
   const handleResetPassword = async (e) => {
 	e.preventDefault();
   
-	const response = await fetch('http://127.0.0.1:2000/api/forgot-password', {
+	const response = await fetch('http://127.0.0.1:2000/forgot-password', {
 	  method: 'POST',
 	  headers: {
 		'Content-Type': 'application/json',
@@ -55,6 +55,7 @@ const Reset = () => {
 		console.log('e22')
 		setErrorMessage(data.error);
 	  }
+	window.location.reload();
   };
 
   const createRipple = (e) => {
@@ -162,7 +163,7 @@ const Reset = () => {
           	border="1px solid #cccccc"
 			className="mailin"
 			value={email}
-			onChange={(e)=>setEmail(e.target.value)}
+			onChange={(e) => setEmail(e.target.value)}
         	/>
 <label className="err1">{errorMessage}</label>
 <label className="mailnk">{successMessage}</label>
