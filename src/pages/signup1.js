@@ -103,7 +103,7 @@ const Signup = () => {
 						About
 					</Link>
 					<Link
-						to="/login"
+						to="/index"
 						className="navbtn"
 					>
 						LOGIN
