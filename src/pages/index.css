@@ -46,6 +46,9 @@ input{
     font-size: 1.5em;
     opacity: 1;
 }
+input:hover{
+    opacity: 1;
+}
 .frmbox .head1,.frmbox .lnk,.frmbox .err,.frmbox .reset,.frmbox .err1,.frmbox .mailnk{
     text-align: center;
 }
