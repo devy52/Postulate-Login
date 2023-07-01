@@ -20,7 +20,7 @@ const Signup = () => {
 
   async function registeruser(event) {
     event.preventDefault()
-    const response = await fetch('https://b4eb8c6d.postulate-login.pages.dev/api/register',{
+    const response = await fetch('http://localhost:2000/api/register',{
       method:'POST',
       headers:{
         'Content-Type':'application/json',

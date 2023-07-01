@@ -17,7 +17,7 @@ const PostForm = () => {
 
     const token = localStorage.getItem('token')
 
-    const response = await fetch('https://b4eb8c6d.postulate-login.pages.dev/api/posts', {
+    const response = await fetch('http://127.0.0.1:2000/api/posts', {
       method: 'POST',
       body: formData,
       headers:{

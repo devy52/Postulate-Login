@@ -21,7 +21,7 @@ const Index = () => {
   async function loginuser(event) {
 	event.preventDefault()
 
-	const response = await fetch('https://b4eb8c6d.postulate-login.pages.dev/api/login', {
+	const response = await fetch('http://localhost:2000/api/login', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',

@@ -19,7 +19,7 @@ const Reset = () => {
   const handleResetPassword = async (e) => {
 	e.preventDefault();
   
-	const response = await fetch('https://b4eb8c6d.postulate-login.pages.dev/forgot-password', {
+	const response = await fetch('http://127.0.0.1:2000/forgot-password', {
 	  method: 'POST',
 	  headers: {
 		'Content-Type': 'application/json',

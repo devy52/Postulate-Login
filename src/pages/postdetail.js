@@ -8,7 +8,7 @@ const PostDetail = () => {
 
   useEffect(() => {
     // Fetch the post data based on the postId
-    fetch(`https://b4eb8c6d.postulate-login.pages.dev/api/posts/${postId}`, {
+    fetch(`http://127.0.0.1:2000/api/posts/${postId}`, {
       headers: {
         'x-access-token': token,
       },
