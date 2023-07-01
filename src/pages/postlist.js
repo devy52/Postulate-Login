@@ -6,7 +6,6 @@ import { Link, useHistory } from 'react-router-dom';
 import './home.css';
 import './postlist.css';
 import { FaTrash } from 'react-icons/fa';
-import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
 const PostList = () => {
   const [posts, setPosts] = useState([]);
@@ -43,7 +42,6 @@ const PostList = () => {
         return <p>Unsupported file format</p>;
       }
     }
-
     return null;
   };
 
@@ -104,13 +102,13 @@ const PostList = () => {
             order="1"
             display="flex"
           >
-            <Link to="/" className="nl">
+            <Link to="/fp" className="nl">
               Home
             </Link>
-            <Link to="/" className="nl">
+            <Link to="/make" className="nl">
               Create
             </Link>
-            <Link to="/" className="nl">
+            <Link to="/cards" className="nl">
               Past Memories
             </Link>
             <Link to="/" className="navbtn" onClick={handleLogout}>
@@ -119,7 +117,7 @@ const PostList = () => {
           </List>
         </Box>
       </Section>
-      <Section padding="80px 0 80px 0" background="url(https://wallpaperaccess.com/full/1386030.jpg) 0% 0%/cover no-repeat,#EDF2F6" sm-padding="60px 0 60px 0">
+      <Section className="middlesec" padding="80px 0 80px 0" background="url(https://wallpaperaccess.com/full/1386030.jpg) 0% 0%/cover no-repeat,#EDF2F6" sm-padding="60px 0 60px 0">
         <Box
           width="100%"
           display="flex"
@@ -135,6 +133,14 @@ const PostList = () => {
           <Text margin="0px 0px 16px 0px" font="--headline2" color="--dark" md-text-align="center" sm-font="normal 700 32px/1.2 &quot;Source Sans Pro&quot;, sans-serif" text-align="center">
             Your Memories
           </Text>
+          {posts.length === 0 && (
+            <React.Fragment>
+            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" className='imgnone'><path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM182.4 382.5c-12.4 5.2-26.5-4.1-21.1-16.4c16-36.6 52.4-62.1 94.8-62.1s78.8 25.6 94.8 62.1c5.4 12.3-8.7 21.6-21.1 16.4c-22.4-9.5-47.4-14.8-73.7-14.8s-51.3 5.3-73.7 14.8zM144.4 208a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm192-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg>
+            <Text className="labelnone" margin="0px 0px 16px 0px" font="--headline2" md-text-align="center" sm-font="normal 700 32px/1.2 &quot;Source Sans Pro&quot;, sans-serif" text-align="center">
+              Nothin Here
+            </Text>
+            </React.Fragment>
+          )}
         </Box>
         <Box display="grid" grid-template-columns="repeat(3, 1fr)" grid-gap="32px 4%" md-grid-template-columns="1fr">
           {posts.map((post) => (
@@ -173,7 +179,7 @@ const PostList = () => {
               <h3 style={{ textAlign: 'left' }}>{post.title}</h3>
               {renderMedia(post)}
               <p>{post.content}</p>
-              <button onClick={() => handleDeletePost(post.id)} className="dbtn">
+              <button onClick={() => handleDeletePost(post._id)} className="dbtn">
                 <Icon category="fa" icon={FaTrash} size="16px" />
               </button>
             </Box>

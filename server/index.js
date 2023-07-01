@@ -168,8 +168,9 @@ app.post('/api/posts', authenticateUser, upload.single('file'), (req, res) => {
   });
 
   app.delete('/api/posts/:postId', authenticateUser, (req, res) => {
+    console.log(req.params.postId)
     const postId = req.params.postId;
-  
+    
     Post.findOneAndDelete({ _id: postId }) // Change _id to id
       .then((deletedPost) => {
         if (!deletedPost) {

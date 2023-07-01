@@ -4,7 +4,9 @@
     font-size: large;
     position: relative; /* Add position property */
   }
-  
+  .labelnone{
+    height: 5em;
+  }
   .dbtn {
     background: none;
     border: none;
@@ -51,12 +53,18 @@
   .post-card-expanded {
     max-height: none;
   }
-  
+  .middlesec{
+    height: 15em;
+  }
   .post-card-button {
     background: none;
     border: none;
     padding: 0;
     cursor: pointer;
   }
-  
+  .imgnone{
+    height: 5em;
+    margin-bottom: 2em;
+    margin-top: 2em;
+  }
     

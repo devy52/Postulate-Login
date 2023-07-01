@@ -9,40 +9,35 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import {useHistory} from "react-router-dom";
 
-const Index = () => {
+const Signup = () => {
+  const history = useHistory()
 	const [showPassword, setShowPassword] = useState(false);
   const [rippleList, setRippleList] = useState([]);
   const [email,setEmail]=useState('')
   const [password,setPassword]=useState('')
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const elem = document.getElementsByClassName("err")[0]
 
-  async function loginuser(event) {
-	event.preventDefault()
+  async function registeruser(event) {
+    event.preventDefault()
+    const response = await fetch('http://localhost:2000/api/register',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body:JSON.stringify({
+        email,
+        password
+      }),
+    })
 
-	const response = await fetch('http://localhost:2000/api/login', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			email,
-			password,
-		}),
-	})
-
-	const data = await response.json()
-
-	if (data.user) {
-		setIsLoggedIn(true);
-		localStorage.setItem('token', data.user);
-		elem.style.display="none"
-		window.location.href = '/fp';
-	  } else {
-		elem.style.display="block"
-	  }
-}
+    const data =await response.json()
+    
+    if(data.status === 'ok'){
+      history.push('/index')
+      localStorage.setItem('token', data.token);
+    }
+  }
 
   const createRipple = (e) => {
     const button = e.currentTarget;
@@ -122,14 +117,14 @@ const Index = () => {
 				</List>
 			</Box>
 		</Section>
-		<Section background="url(https://wallpaperaccess.com/full/1905877.jpg) 20% 15%/cover" padding="60px 0" sm-padding="40px 0" height="556px">
+		<Section background="url(https://cdn.pixabay.com/photo/2016/01/09/18/27/camera-1130731_1280.jpg) 20% 15%/cover" padding="60px 0" sm-padding="40px 0" height="556px">
   			<Box
     			display="flex"
     			justify-content="center"
     			align-items="center"
     			height="100%"
   			>
-    		<form onSubmit={loginuser}>
+    		<form onSubmit={registeruser}>
 				
       		<Box
         		display="flex"
@@ -139,7 +134,7 @@ const Index = () => {
         	width="400px"
 			className="frmbox"
       		>
-			<label className="head1">Login</label>
+			<label className="head1">Sign Up</label>
 			<label className="mail">Email</label>
         	<input
           	type="email"
@@ -174,15 +169,13 @@ const Index = () => {
   className="icon visible-icon"
 />
 </div>
-<label className="err">Invalid Credentials</label>
-
         	<button
         type="submit"
         className="ripple-btn"
         onClick={createRipple}
 		value="Login"
       >
-        Login
+        Register
         {rippleList.map((ripple, index) => (
           <span
             key={index}
@@ -196,8 +189,7 @@ const Index = () => {
           />
         ))}
       </button>
-	  <label className="lnk">New User? <Link to="/signup" className="reglnk">Register</Link></label>
-	  <label className="lnk reset"><Link to="/reset" className="reglnk">Forgot Password</Link></label>
+	  <label className="lnk">Already a registered? <Link to="/index" className="reglnk">Login</Link></label>
       		</Box>
     		</form>
   			</Box>
@@ -250,4 +242,4 @@ const Index = () => {
 	</Theme>);
 };
 
-export default Index;
+export default Signup;
