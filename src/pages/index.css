@@ -49,7 +49,7 @@ input{
     text-align: center;
 }
 .frmbox{
-    opacity: 80%;
+    opacity: 0.5;
     background-color: white;
 }
 .frmbox:hover{
