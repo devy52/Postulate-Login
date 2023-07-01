@@ -53,7 +53,7 @@ const PostList = () => {
 
   const handleDeletePost = async (postid) => {
     console.log('Delete button clicked');
-    const response = await fetch(`http://127.0.0.1:2000/api/posts/${postid}`, {
+    const response = await fetch(`https://b4eb8c6d.postulate-login.pages.dev/api/posts/${postid}`, {
       method: 'DELETE',
       headers: {
         'x-access-token': token,
