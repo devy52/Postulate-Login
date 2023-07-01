@@ -39,7 +39,7 @@ const storage = multer.diskStorage({
 
 const posts = [];
 
-mongoose.connect('mongodb://127.0.0.1:27017/postulate', {
+mongoose.connect('mongodb+srv://dev52:root@cluster0.msyyjkw.mongodb.net/postulate', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
