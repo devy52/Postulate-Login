@@ -160,6 +160,7 @@ const Reset = () => {
           	margin-bottom="20px"
           	padding="10px"
           	border-radius="4px"
+			opacity="1"
           	border="1px solid #cccccc"
 			className="mailin"
 			value={email}

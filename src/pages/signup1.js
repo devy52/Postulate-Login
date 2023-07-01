@@ -144,6 +144,7 @@ const Signup = () => {
           	border-radius="4px"
           	border="1px solid #cccccc"
 			className="mailin"
+			opacity="1"
 			value={email}
 			onChange={(e)=>setEmail(e.target.value)}
         	/>
@@ -155,6 +156,7 @@ const Signup = () => {
           	margin-bottom="20px"
           	padding="10px"
           	border-radius="4px"
+			opacity="1"
           	border="1px solid #cccccc"
 			height={"200"}
 			className="passe"

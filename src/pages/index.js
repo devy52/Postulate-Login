@@ -149,6 +149,7 @@ const Index = () => {
           	border-radius="4px"
           	border="1px solid #cccccc"
 			className="mailin"
+			opacity="1"
 			value={email}
 			onChange={(e)=>setEmail(e.target.value)}
         	/>
@@ -162,6 +163,7 @@ const Index = () => {
           	border-radius="4px"
           	border="1px solid #cccccc"
 			height={"200"}
+			opacity="1"
 			className="passe"
 			value={password}
 			onChange={(e)=>setPassword(e.target.value)}
