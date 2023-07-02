@@ -81,7 +81,7 @@ const Signup = () => {
 				md-flex-direction="column"
 			>
 				<Text margin="0" md-margin="0px 0 20px 0" text-align="left" font="normal 900 50px/1.5 --fontFamily-googleTeko">
-					JOURNEY DIARIES
+					NoteX
 				</Text>
 				<Link to="/" color="#000000" />
 				<List
