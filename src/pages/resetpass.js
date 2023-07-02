@@ -19,7 +19,7 @@ const Reset = () => {
   const handleResetPassword = async (e) => {
 	e.preventDefault();
   
-	const response = await fetch('http://127.0.0.1:2000/forgot-password', {
+	const response = await fetch(`http://${window.location.hostname}/forgot-password`, {
 	  method: 'POST',
 	  headers: {
 		'Content-Type': 'application/json',
@@ -135,7 +135,7 @@ const Reset = () => {
 				</List>
 			</Box>
 		</Section>
-		<Section background="url(https://wallpaperaccess.com/full/1905877.jpg) 20% 15%/cover" padding="60px 0" sm-padding="40px 0" height="556px">
+		<Section background="url(https://cdn.pixabay.com/photo/2018/11/17/07/10/notebook-3820634_1280.jpg) 20% 15%/cover" padding="60px 0" sm-padding="40px 0" height="556px">
   			<Box
     			display="flex"
     			justify-content="center"

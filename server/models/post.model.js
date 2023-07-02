@@ -5,8 +5,8 @@ const postSchema = new mongoose.Schema({
   title: String,
   content: String,
   file: String,
-  Date:String,
   userId: String,
+  date: { type: Date, default: Date.now }
 });
 
 const Post = mongoose.model('Post', postSchema);

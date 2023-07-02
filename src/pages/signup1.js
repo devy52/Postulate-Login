@@ -20,7 +20,7 @@ const Signup = () => {
 
   async function registeruser(event) {
     event.preventDefault()
-    const response = await fetch('http://localhost:2000/api/register',{
+    const response = await fetch(`http://${window.location.hostname}/api/register`,{
       method:'POST',
       headers:{
         'Content-Type':'application/json',
@@ -37,6 +37,9 @@ const Signup = () => {
       history.push('/index')
       localStorage.setItem('token', data.token);
     }
+	else{
+		alert('Email Already Registered')
+	}
   }
 
   const createRipple = (e) => {
@@ -117,7 +120,7 @@ const Signup = () => {
 				</List>
 			</Box>
 		</Section>
-		<Section background="url(https://cdn.pixabay.com/photo/2016/01/09/18/27/camera-1130731_1280.jpg) 20% 15%/cover" padding="60px 0" sm-padding="40px 0" height="556px">
+		<Section background="url(https://cdn.pixabay.com/photo/2018/11/17/07/10/notebook-3820634_1280.jpg) 20% 15%/cover" padding="60px 0" sm-padding="40px 0" height="556px">
   			<Box
     			display="flex"
     			justify-content="center"

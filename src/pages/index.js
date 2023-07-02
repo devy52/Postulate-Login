@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import axios from 'axios';
 
 const Index = () => {
 	const [showPassword, setShowPassword] = useState(false);
@@ -21,7 +22,7 @@ const Index = () => {
   async function loginuser(event) {
 	event.preventDefault()
 
-	const response = await fetch('http://localhost:2000/api/login', {
+	const response = await fetch(`http://${window.location.hostname}/api/login`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -38,7 +39,7 @@ const Index = () => {
 		setIsLoggedIn(true);
 		localStorage.setItem('token', data.user);
 		elem.style.display="none"
-		window.location.href = '/fp';
+		window.location.href = '/home';
 	  } else {
 		elem.style.display="block"
 	  }
@@ -122,7 +123,7 @@ const Index = () => {
 				</List>
 			</Box>
 		</Section>
-		<Section background="url(https://wallpaperaccess.com/full/1905877.jpg) 20% 15%/cover" padding="60px 0" sm-padding="40px 0" height="556px">
+		<Section background="url(https://cdn.pixabay.com/photo/2018/11/17/07/10/notebook-3820634_1280.jpg) 20% 15%/cover" padding="60px 0" sm-padding="40px 0" height="556px">
   			<Box
     			display="flex"
     			justify-content="center"

@@ -25,6 +25,7 @@ const PostList = () => {
   }, [token]);
 
   const renderMedia = (post) => {
+    console.log(post)
     if (post.file) {
       const fileExtension = post.file.split('.').pop().toLowerCase();
       const supportedImageFormats = ['jpg', 'jpeg', 'png', 'gif'];
@@ -53,7 +54,7 @@ const PostList = () => {
 
   const handleDeletePost = async (postid) => {
     console.log('Delete button clicked');
-    const response = await fetch(`http://127.0.0.1:2000/api/posts/${postid}`, {
+    const response = await fetch(`http://${window.location.hostname}/api/posts/${postid}`, {
       method: 'DELETE',
       headers: {
         'x-access-token': token,
@@ -71,12 +72,17 @@ const PostList = () => {
     }
   };
 
+  const renderDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
+  };
+
   
 
   return (
     <Theme theme={theme}>
       <Helmet>
-        <title>HomePage - JJ</title>
+        <title>Prev. Notes</title>
         <meta name="description" content="Web site created using quarkly.io" />
         <link rel="shortcut icon" href="https://uploads.quarkly.io/readme/cra/favicon-32x32.ico" type="image/x-icon" />
       </Helmet>
@@ -102,14 +108,17 @@ const PostList = () => {
             order="1"
             display="flex"
           >
-            <Link to="/fp" className="nl">
+            <Link to="/home" className="nl">
               Home
+            </Link>
+            <Link to="/bl" className="nl">
+              Bucket
             </Link>
             <Link to="/make" className="nl">
               Create
             </Link>
             <Link to="/cards" className="nl">
-              Past Memories
+              Prev. Notes
             </Link>
             <Link to="/" className="navbtn" onClick={handleLogout}>
               Logout
@@ -117,7 +126,7 @@ const PostList = () => {
           </List>
         </Box>
       </Section>
-      <Section className="middlesec" padding="80px 0 80px 0" background="url(https://wallpaperaccess.com/full/1386030.jpg) 0% 0%/cover no-repeat,#EDF2F6" sm-padding="60px 0 60px 0">
+      <Section className="middlesec" padding="80px 0 80px 0" background="url(https://cdn.pixabay.com/photo/2018/11/17/07/10/notebook-3820634_1280.jpg) 0% 0%/cover no-repeat,#EDF2F6" sm-padding="60px 0 60px 0">
         <Box
           width="100%"
           display="flex"
@@ -142,7 +151,7 @@ const PostList = () => {
             </React.Fragment>
           )}
         </Box>
-        <Box display="grid" grid-template-columns="repeat(3, 1fr)" grid-gap="32px 4%" md-grid-template-columns="1fr">
+        <Box display="grid" grid-template-columns="repeat(3, 1fr)" grid-gap="32px 4%" md-grid-template-columns="1fr" filter="brightness(70%)">
           {posts.map((post) => (
             <Box
               padding="30px 45px"
@@ -169,12 +178,12 @@ const PostList = () => {
                   top: '12px',
                   right: '12px',
                   color: '#fff',
-                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  backgroundColor: '#808080',
                   padding: '4px 8px',
                   borderRadius: '4px',
                 }}
               >
-                {post.date}
+                {renderDate(post.date)}
               </p>
               <h3 style={{ textAlign: 'left' }}>{post.title}</h3>
               {renderMedia(post)}

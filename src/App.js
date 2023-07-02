@@ -1,15 +1,15 @@
 import React from "react";
 import Index from "./pages/index";
 import Page404 from "./pages/page404";
-//import Signup from "./pages/signup";
 import Home from "./pages/home";
-import FP from "./pages/fp";
 import Cards from "./pages/postlist";
-import Make from "./pages/post";
+import AboutUsPage from "./pages/about";
 import Reset from './pages/resetpass';
 import Signup from "./pages/signup1";
+import PhpPage from "./pages/php";
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
+import Homepage from "./pages/homepage";
 
 const GlobalStyles = createGlobalStyle`
     body {
@@ -40,13 +40,14 @@ const App = () => {
         /> */}
         <Route exact path="/" component={Home} />
         <Route exact path="/index" component={Index} />
+        <Route exact path="/about" component={AboutUsPage} />
         <Route exact path="/signup" component={Signup} />
         <Route exact path="/reset" component={Reset} />
         <Route
-        path="/fp"
+        path="/home"
         render={() =>
           localStorage.getItem('token') ? (
-            <FP />
+            <Homepage/>
           ) : (
             <Redirect to="/index" />
           )
@@ -66,7 +67,7 @@ const App = () => {
         path="/make"
         render={() =>
           localStorage.getItem('token') ? (
-            <Make />
+            <PhpPage />
           ) : (
             <Redirect to="/index" />
           )

@@ -7,6 +7,7 @@ import { RawHtml } from "@quarkly/components";
 import { FaPlaneDeparture, FaClipboardList, FaBookOpen } from "react-icons/fa";
 import {Link } from "react-router-dom";
 import "./home.css";
+
 export default (() => {
 	return <Theme theme={theme}>
 		<GlobalQuarklyPageStyles pageUrl={"index"} />
@@ -46,7 +47,7 @@ export default (() => {
 						Home
 					</Link>
 					<Link
-						to="/"
+						to="/about"
 						className="nl"
 					>
 						About
@@ -66,7 +67,7 @@ export default (() => {
 				</List>
 			</Box>
 		</Section>
-		<Section padding="80px 0 80px 0" background="url(https://wallpaperaccess.com/full/1386030.jpg) 0% 0%/cover no-repeat,#EDF2F6" sm-padding="60px 0 60px 0">
+		<Section padding="80px 0 80px 0" background="url(https://cdn.pixabay.com/photo/2018/11/17/07/10/notebook-3820634_1280.jpg) 0% 0%/cover no-repeat,#EDF2F6" sm-padding="60px 0 60px 0">
 			<Box
 				width="100%"
 				display="flex"
@@ -90,7 +91,7 @@ export default (() => {
 					Make your own Journal for you Jorneys
 				</Text>
 			</Box>
-			<Box display="grid" grid-template-columns="repeat(3, 1fr)" grid-gap="32px 4%" md-grid-template-columns="1fr">
+			<Box display="grid" grid-template-columns="repeat(3, 1fr)" grid-gap="32px 4%" md-grid-template-columns="1fr" filter="brightness(80%)">
 				<Box
 					padding="45px 45px"
 					lg-padding="45px 30px"
@@ -218,7 +219,7 @@ export default (() => {
 				justify-content="center"
 			>
 				<Link
-					to="/"
+					to="/about"
 					className="nl1"
 				>
 					About
