@@ -19,7 +19,7 @@ const Reset = () => {
   const handleResetPassword = async (e) => {
 	e.preventDefault();
   
-	const response = await fetch(`http://${window.location.hostname}/forgot-password`, {
+	const response = await fetch(`https://${window.location.hostname}/forgot-password`, {
 	  method: 'POST',
 	  headers: {
 		'Content-Type': 'application/json',

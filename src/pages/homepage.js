@@ -17,7 +17,7 @@ export default (() => {
     const token = localStorage.getItem('token') || '';
 
     useEffect(() => {
-        fetch(`http://${window.location.hostname}/posts`, {
+        fetch(`https://${window.location.hostname}/posts`, {
           headers: {
             'x-access-token': token,
           },

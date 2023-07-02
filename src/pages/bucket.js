@@ -23,7 +23,7 @@ export default (() => {
 
   const fetchTasks = async () => {
     try {
-      const response = await fetch(`http://${window.location.hostname}/tasks`,{
+      const response = await fetch(`https://${window.location.hostname}/tasks`,{
         headers: {
             'x-access-token': token,
           },
@@ -39,7 +39,7 @@ export default (() => {
     if (newTask.trim() === '') return;
 
     try {
-      const response = await fetch(`http://${window.location.hostname}/tasks`, {
+      const response = await fetch(`https://${window.location.hostname}/tasks`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ export default (() => {
 
   const removeTask = async (taskId) => {
     try {
-      const response = await fetch(`http://${window.location.hostname}/tasks/${taskId}`, {
+      const response = await fetch(`https://${window.location.hostname}/tasks/${taskId}`, {
         method: 'DELETE',
         headers: {
             'x-access-token': token, // Include the token in the request headers
@@ -77,7 +77,7 @@ export default (() => {
 
   const updateTask = async (taskId, newTaskName) => {
     try {
-      const response = await fetch(`http://${window.location.hostname}/tasks/${taskId}`, {
+      const response = await fetch(`https://${window.location.hostname}/tasks/${taskId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

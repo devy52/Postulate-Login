@@ -22,7 +22,7 @@ const Index = () => {
   async function loginuser(event) {
 	event.preventDefault()
 
-	const response = await fetch(`http://${window.location.hostname}/login`, {
+	const response = await fetch(`https://${window.location.hostname}/login`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',

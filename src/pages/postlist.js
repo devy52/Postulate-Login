@@ -14,7 +14,7 @@ const PostList = () => {
   const token = localStorage.getItem('token') || '';
 
   useEffect(() => {
-    fetch(`http://${window.location.hostname}/posts`, {
+    fetch(`https://${window.location.hostname}/posts`, {
       headers: {
         'x-access-token': token,
       },
@@ -32,11 +32,11 @@ const PostList = () => {
       const supportedVideoFormats = ['mp4', 'mov', 'avi', 'webm', 'mpeg2'];
 
       if (supportedImageFormats.includes(fileExtension)) {
-        return <img src={`http://${window.location.hostname}/uploads/${post.file}`} alt="Post" />;
+        return <img src={`https://${window.location.hostname}/uploads/${post.file}`} alt="Post" />;
       } else if (supportedVideoFormats.includes(fileExtension)) {
         return (
           <video controls>
-            <source src={`http://${window.location.hostname}/uploads/${post.file}`} type="video/mp4" />
+            <source src={`https://${window.location.hostname}/uploads/${post.file}`} type="video/mp4" />
           </video>
         );
       } else {
@@ -54,7 +54,7 @@ const PostList = () => {
 
   const handleDeletePost = async (postid) => {
     console.log('Delete button clicked');
-    const response = await fetch(`http://${window.location.hostname}/posts/${postid}`, {
+    const response = await fetch(`https://${window.location.hostname}/posts/${postid}`, {
       method: 'DELETE',
       headers: {
         'x-access-token': token,

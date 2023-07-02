@@ -20,7 +20,7 @@ const Signup = () => {
 
   async function registeruser(event) {
     event.preventDefault()
-    const response = await fetch(`http://${window.location.hostname}/register`,{
+    const response = await fetch(`https://${window.location.hostname}/register`,{
       method:'POST',
       headers:{
         'Content-Type':'application/json',
