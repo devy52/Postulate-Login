@@ -10,10 +10,9 @@
   .dbtn {
     background: none;
     border: none;
-    position: absolute; /* Add position property */
-    bottom: 10px; /* Adjust the bottom value as per your preference */
-    right: 10px; /* Adjust the right value as per your preference */
-    color: red; /* Set the color to red */
+    position: absolute;
+    bottom: 10px; 
+    color: red;
   }
   .post-card {
     padding: 30px 45px;

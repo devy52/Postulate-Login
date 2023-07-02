@@ -17,7 +17,7 @@ export default (() => {
     const token = localStorage.getItem('token') || '';
 
     useEffect(() => {
-        fetch(`http://${window.location.hostname}/api/posts`, {
+        fetch(`http://${window.location.hostname}/posts`, {
           headers: {
             'x-access-token': token,
           },
@@ -64,7 +64,7 @@ export default (() => {
             <Link to="/home" className="nl">
               Home
             </Link>
-            <Link to="/bl" className="nl">
+            <Link to="/bucket" className="nl">
               Bucket
             </Link>
             <Link to="/make" className="nl">
@@ -111,7 +111,7 @@ export default (() => {
 					</Text>
 				</Box>
                 </Link>
-				<Link to="/bl" className="cl">
+				<Link to="/bucket" className="cl">
                 <Box
 					padding="45px 45px"
 					lg-padding="45px 30px"

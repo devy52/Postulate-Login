@@ -13,7 +13,7 @@ export default (() => {
   const token = localStorage.getItem('token') || '';
 
   useEffect(() => {
-    fetch(`http://${window.location.hostname}/api/posts`, {
+    fetch(`http://${window.location.hostname}/posts`, {
       headers: {
         'x-access-token': token,
       },
@@ -58,7 +58,7 @@ export default (() => {
 
     const token = localStorage.getItem('token')
 
-    const response = await fetch('http://127.0.0.1:2000/api/posts', {
+    const response = await fetch(`http://${window.location.hostname}/posts`, {
       method: 'POST',
       body: formData,
       headers: {
@@ -71,6 +71,7 @@ export default (() => {
       setContent('');
       setFile(null);
       setDate('');
+      history.replace('/cards')
     } else {
       console.error('Error saving post');
     }
@@ -111,7 +112,7 @@ export default (() => {
             <Link to="/home" className="nl">
               Home
             </Link>
-            <Link to="/bl" className="nl">
+            <Link to="/bucket" className="nl">
               Bucket
             </Link>
             <Link to="/make" className="nl">

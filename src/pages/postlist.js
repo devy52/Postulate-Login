@@ -14,7 +14,7 @@ const PostList = () => {
   const token = localStorage.getItem('token') || '';
 
   useEffect(() => {
-    fetch('http://127.0.0.1:2000/api/posts', {
+    fetch(`http://${window.location.hostname}/posts`, {
       headers: {
         'x-access-token': token,
       },
@@ -32,11 +32,11 @@ const PostList = () => {
       const supportedVideoFormats = ['mp4', 'mov', 'avi', 'webm', 'mpeg2'];
 
       if (supportedImageFormats.includes(fileExtension)) {
-        return <img src={`http://localhost:2000/uploads/${post.file}`} alt="Post" />;
+        return <img src={`http://${window.location.hostname}/uploads/${post.file}`} alt="Post" />;
       } else if (supportedVideoFormats.includes(fileExtension)) {
         return (
           <video controls>
-            <source src={`http://localhost:2000/uploads/${post.file}`} type="video/mp4" />
+            <source src={`http://${window.location.hostname}/uploads/${post.file}`} type="video/mp4" />
           </video>
         );
       } else {
@@ -54,7 +54,7 @@ const PostList = () => {
 
   const handleDeletePost = async (postid) => {
     console.log('Delete button clicked');
-    const response = await fetch(`http://${window.location.hostname}/api/posts/${postid}`, {
+    const response = await fetch(`http://${window.location.hostname}/posts/${postid}`, {
       method: 'DELETE',
       headers: {
         'x-access-token': token,
@@ -111,7 +111,7 @@ const PostList = () => {
             <Link to="/home" className="nl">
               Home
             </Link>
-            <Link to="/bl" className="nl">
+            <Link to="/bucket" className="nl">
               Bucket
             </Link>
             <Link to="/make" className="nl">
@@ -176,7 +176,6 @@ const PostList = () => {
                 style={{
                   position: 'absolute',
                   top: '12px',
-                  right: '12px',
                   color: '#fff',
                   backgroundColor: '#808080',
                   padding: '4px 8px',

@@ -10,6 +10,7 @@ import PhpPage from "./pages/php";
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 import Homepage from "./pages/homepage";
+import Bucket from "pages/bucket";
 
 const GlobalStyles = createGlobalStyle`
     body {
@@ -40,9 +41,20 @@ const App = () => {
         /> */}
         <Route exact path="/" component={Home} />
         <Route exact path="/index" component={Index} />
+        <Route exact path="/bucket" component={Bucket} />
         <Route exact path="/about" component={AboutUsPage} />
         <Route exact path="/signup" component={Signup} />
         <Route exact path="/reset" component={Reset} />
+        <Route
+        path="/bucket"
+        render={() =>
+          localStorage.getItem('token') ? (
+            <Bucket/>
+          ) : (
+            <Redirect to="/index" />
+          )
+        }
+      />
         <Route
         path="/home"
         render={() =>
