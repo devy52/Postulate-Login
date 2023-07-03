@@ -33,7 +33,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-mongoose.connect('mongodb+srv://dev52:root@cluster0.msyyjkw.mongodb.net/postulate', {
+mongoose.connect('mongodb+srv://dev52:******@cluster0.msyyjkw.mongodb.net/postulate', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
