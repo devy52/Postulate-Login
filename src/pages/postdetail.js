@@ -8,7 +8,7 @@ const PostDetail = () => {
 
   useEffect(() => {
     // Fetch the post data based on the postId
-    fetch(`https://${window.location.hostname}/posts/${postId}`, {
+    fetch(`http://${window.location.hostname}/posts/${postId}`, {
       headers: {
         'x-access-token': token,
       },

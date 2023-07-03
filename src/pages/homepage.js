@@ -17,7 +17,7 @@ export default (() => {
     const token = localStorage.getItem('token') || '';
 
     useEffect(() => {
-        fetch(`https://${window.location.hostname}/posts`, {
+        fetch(`http://${window.location.hostname}/posts`, {
           headers: {
             'x-access-token': token,
           },
@@ -37,7 +37,7 @@ export default (() => {
 			<title>
 				HomePage - JJ
 			</title>
-			<link rel={"shortcut icon"} href={"https://uploads.quarkly.io/readme/cra/favicon-32x32.ico"} type={"image/x-icon"} />
+			<link rel={"shortcut icon"} href={"http://uploads.quarkly.io/readme/cra/favicon-32x32.ico"} type={"image/x-icon"} />
 		</Helmet>
 		<Section padding="0px 0 0px 0">
 			<Box
@@ -49,7 +49,7 @@ export default (() => {
 				md-flex-direction="column"
 			>
 				<Text margin="0" md-margin="0px 0 20px 0" text-align="left" font="normal 900 50px/1.5 --fontFamily-googleTeko">
-					NoteX - Home
+					Journey Diaries
 				</Text>
 				<Link to="#" color="#000000" />
 				<List
@@ -79,7 +79,7 @@ export default (() => {
           </List>
 			</Box>
 		</Section>
-		<Section padding="100px 0 100px 0" background="url(https://cdn.pixabay.com/photo/2018/11/17/07/10/notebook-3820634_1280.jpg) 0% 0%/cover no-repeat,#EDF2F6" sm-padding="60px 0 60px 0">
+		<Section padding="100px 0 100px 0" background="url(http://cdn.pixabay.com/photo/2018/11/17/07/10/notebook-3820634_1280.jpg) 0% 0%/cover no-repeat,#EDF2F6" sm-padding="60px 0 60px 0">
 			<Box display="grid" grid-template-columns="repeat(3, 1fr)" grid-gap="32px 4%" md-grid-template-columns="1fr" filter="brightness(80%)">
 				<Link to="/make" className="cl">
                 <Box

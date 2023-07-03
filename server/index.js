@@ -33,7 +33,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-mongoose.connect('mongodb+srv://dev52:root@cluster0.msyyjkw.mongodb.net/postulate', {
+mongoose.connect('mongodb+srv://dev52:*****@cluster0.msyyjkw.mongodb.net/postulate', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -81,23 +81,32 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-  const user = await User.findOne({
-    email: req.body.email,
-  });
+  const { email, password } = req.body;
 
-  if (!user) {
-    return res.json({ status: 'error', error: 'Invalid login' });
-  }
+  try {
+    const user = await User.findOne({ email });
+    console.log(user)
+    console.log(user.email)
+    console.log(email)
+    console.log(password)
+    if (!user) {
+      return res.json({ status: 'error', error: 'Invalid login' });
+    }
 
-  const isPasswordValid = await bcrypt.compare(req.body.password, user.password);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
-  if (isPasswordValid) {
-    const token = jwt.sign({ email: user.email }, 'abc123');
-    return res.json({ status: 'ok', user: token });
-  } else {
-    return res.json({ status: 'error', user: false });
+    if (isPasswordValid) {
+      const token = jwt.sign({ email: user.email }, 'abc123');
+      return res.json({ status: 'ok', user: token });
+    } else {
+      return res.json({ status: 'error', error: 'Invalid login' });
+    }
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ status: 'error', error: 'Internal server error' });
   }
 });
+
 
 // Endpoint to create a new post
 app.post('/posts', authenticateUser, upload.single('file'), (req, res) => {

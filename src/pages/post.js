@@ -17,7 +17,7 @@ const PostForm = () => {
 
     const token = localStorage.getItem('token')
 
-    const response = await fetch(`https://${window.location.hostname}/posts`, {
+    const response = await fetch(`http://${window.location.hostname}/posts`, {
       method: 'POST',
       body: formData,
       headers:{

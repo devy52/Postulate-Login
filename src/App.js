@@ -10,7 +10,7 @@ import PhpPage from "./pages/php";
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import { createGlobalStyle } from "styled-components";
 import Homepage from "./pages/homepage";
-import Bucket from "pages/bucket";
+import Bucket from "./pages/bucket";
 
 const GlobalStyles = createGlobalStyle`
     body {

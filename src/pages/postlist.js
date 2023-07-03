@@ -14,7 +14,7 @@ const PostList = () => {
   const token = localStorage.getItem('token') || '';
 
   useEffect(() => {
-    fetch(`https://${window.location.hostname}/posts`, {
+    fetch(`http://${window.location.hostname}/posts`, {
       headers: {
         'x-access-token': token,
       },
@@ -32,11 +32,11 @@ const PostList = () => {
       const supportedVideoFormats = ['mp4', 'mov', 'avi', 'webm', 'mpeg2'];
 
       if (supportedImageFormats.includes(fileExtension)) {
-        return <img src={`https://${window.location.hostname}/uploads/${post.file}`} alt="Post" />;
+        return <img src={`http://${window.location.hostname}/uploads/${post.file}`} alt="Post" />;
       } else if (supportedVideoFormats.includes(fileExtension)) {
         return (
           <video controls>
-            <source src={`https://${window.location.hostname}/uploads/${post.file}`} type="video/mp4" />
+            <source src={`http://${window.location.hostname}/uploads/${post.file}`} type="video/mp4" />
           </video>
         );
       } else {
@@ -54,7 +54,7 @@ const PostList = () => {
 
   const handleDeletePost = async (postid) => {
     console.log('Delete button clicked');
-    const response = await fetch(`https://${window.location.hostname}/posts/${postid}`, {
+    const response = await fetch(`http://${window.location.hostname}/posts/${postid}`, {
       method: 'DELETE',
       headers: {
         'x-access-token': token,
@@ -84,7 +84,7 @@ const PostList = () => {
       <Helmet>
         <title>Prev. Notes</title>
         <meta name="description" content="Web site created using quarkly.io" />
-        <link rel="shortcut icon" href="https://uploads.quarkly.io/readme/cra/favicon-32x32.ico" type="image/x-icon" />
+        <link rel="shortcut icon" href="http://uploads.quarkly.io/readme/cra/favicon-32x32.ico" type="image/x-icon" />
       </Helmet>
       <Section padding="0px 0 0px 0">
         <Box
@@ -96,7 +96,7 @@ const PostList = () => {
           md-flex-direction="column"
         >
           <Text margin="0" md-margin="0px 0 20px 0" text-align="left" font="normal 900 50px/1.5 --fontFamily-googleTeko">
-            NoteX
+            Journey Diaries
           </Text>
           <Link to="#" color="#000000" />
           <List
@@ -126,7 +126,7 @@ const PostList = () => {
           </List>
         </Box>
       </Section>
-      <Section className="middlesec" padding="80px 0 80px 0" background="url(https://cdn.pixabay.com/photo/2018/11/17/07/10/notebook-3820634_1280.jpg) 0% 0%/cover no-repeat,#EDF2F6" sm-padding="60px 0 60px 0">
+      <Section className="middlesec" padding="80px 0 80px 0" background="url(http://cdn.pixabay.com/photo/2018/11/17/07/10/notebook-3820634_1280.jpg) 0% 0%/cover no-repeat,#EDF2F6" sm-padding="60px 0 60px 0">
         <Box
           width="100%"
           display="flex"
