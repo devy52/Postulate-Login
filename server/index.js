@@ -180,7 +180,7 @@ app.post("/forgot-password", async function (req, res) {
     var token = jwt.sign({ email: oldUser.email, id: oldUser._id }, 'abcd1234', {
       expiresIn: "5m",
     });
-    var link = "http://" + hostname + "/reset-password/" + oldUser._id + "/" + token;
+    var link = "https://" + hostname + "/reset-password/" + oldUser._id + "/" + token;
     console.log(link);
     var transporter = nodemailer.createTransport({
       service: "gmail",
