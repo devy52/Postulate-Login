@@ -22,7 +22,7 @@ const Index = () => {
   async function loginuser(event) {
 	event.preventDefault()
 
-	const response = await fetch(`http://${window.location.hostname}/login`, {
+	const response = await fetch(`https://${window.location.hostname}/login`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -69,10 +69,10 @@ const Index = () => {
 				Login - JJ
 			</title>
 			<meta name={"description"} content={"Web site created using quarkly.io"} />
-			<link rel={"shortcut icon"} href={"http://uploads.quarkly.io/readme/cra/favicon-32x32.ico"} type={"image/x-icon"} />
-			<link rel={"preconnect"} href={"http://fonts.googleapis.com"}/>
-			<link rel={"preconnect"} href={"http://fonts.gstatic.com"} crossorigin/>
-			<link href={"http://fonts.googleapis.com/css2?family=Diphylleia&family=Teko&display=swap"} rel={"stylesheet"}/>
+			<link rel={"shortcut icon"} href={"https://uploads.quarkly.io/readme/cra/favicon-32x32.ico"} type={"image/x-icon"} />
+			<link rel={"preconnect"} href={"https://fonts.googleapis.com"}/>
+			<link rel={"preconnect"} href={"https://fonts.gstatic.com"} crossorigin/>
+			<link href={"https://fonts.googleapis.com/css2?family=Diphylleia&family=Teko&display=swap"} rel={"stylesheet"}/>
 		</Helmet>
 		<Section padding="0px 0 0px 0">
 			<Box
@@ -123,7 +123,7 @@ const Index = () => {
 				</List>
 			</Box>
 		</Section>
-		<Section background="url(http://cdn.pixabay.com/photo/2018/11/17/07/10/notebook-3820634_1280.jpg) 20% 15%/cover" padding="60px 0" sm-padding="40px 0" height="556px">
+		<Section background="url(https://cdn.pixabay.com/photo/2018/11/17/07/10/notebook-3820634_1280.jpg) 20% 15%/cover" padding="60px 0" sm-padding="40px 0" height="556px">
   			<Box
     			display="flex"
     			justify-content="center"
