@@ -35,8 +35,8 @@
         "styled-components": "^5.0.1"
     },
     "scripts": {
-        "start": "set HTTPS=true&&set SSL_CRT_FILE=./postulate-login.pages.dev.pem&&set SSL_KEY_FILE=./postulate-login.pages.dev-key.pem&&react-scripts --openssl-legacy-provider start",
-        "build": "react-scripts --openssl-legacy-provider build",
+        "start": "set HTTPS=true&&set SSL_CRT_FILE=./postulate-login.pages.dev.pem&&set SSL_KEY_FILE=./postulate-login.pages.dev-key.pem&&react-scripts start",
+        "build": "react-scripts build",
         "build:ci": "cross-env CI=false npm run build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
