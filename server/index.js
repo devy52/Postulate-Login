@@ -1,19 +1,19 @@
-const express = require('express');
-const app = express();
-const cors = require('cors');
-const mongoose = require('mongoose');
-const User = require('./models/user.model');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const multer = require('multer');
-const path = require('path');
-const bodyParser = require('body-parser');
-const { v4: uuidv4 } = require('uuid');
-const Post = require('./models/post.model')
-const nodemailer = require('nodemailer');
-const os = require('os')
-
-const hostname = os.hostname();
+var express = require('express');
+var app = express();
+var cors = require('cors');
+var mongoose = require('mongoose');
+var User = require('./models/user.model');
+var jwt = require('jsonwebtoken');
+var bcrypt = require('bcrypt');
+var multer = require('multer');
+var path = require('path');
+var bodyParser = require('body-parser');
+var uuidv4 = require('uuid').v4;
+var Post = require('./models/post.model');
+var nodemailer = require('nodemailer');
+var os = require('os');
+var AWS = require('aws-sdk');
+var hostname = os.hostname();
 
 app.use(cors());
 app.use(express.json());
@@ -23,56 +23,50 @@ app.set("view engine", "ejs");
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: false }));
 
-const storage = multer.diskStorage({
-  destination: './uploads',
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-  },
+var s3 = new AWS.S3({
+  accessKeyId: 'YOUR_ACCESS_KEY',
+  secretAccessKey: 'YOUR_SECRET_ACCESS_KEY',
+  region: 'YOUR_AWS_REGION',
 });
 
-const upload = multer({ storage: storage });
+var storage = multer.memoryStorage();
 
-mongoose.connect('mongodb+srv://dev52:****@cluster0.msyyjkw.mongodb.net/postulate', {
+var upload = multer({ storage: storage });
+
+mongoose.connect('mongodb+srv://dev52:root@cluster0.msyyjkw.mongodb.net/postulate', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
 // Add authentication middleware
-const authenticateUser = (req, res, next) => {
-  const token = req.headers['x-access-token'];
+var authenticateUser = async function (req, res, next) {
+  var token = req.headers['x-access-token'];
   if (!token) {
     return res.status(401).json({ message: 'Token not provided' });
   }
 
   try {
-    const decoded = jwt.verify(token, 'abc123');
-    const email = decoded.email;
-    User.findOne({ email: email })
-      .then((user) => {
-        if (!user) {
-          return res.status(401).json({ message: 'Invalid token' });
-        }
+    var decoded = jwt.verify(token, 'abc123');
+    var email = decoded.email;
+    var user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid token' });
+    }
 
-        req.user = user;
-        next();
-      })
-      .catch((error) => {
-        console.error('Error finding user:', error);
-        res.status(500).json({ message: 'Internal server error' });
-      });
+    req.user = user;
+    next();
   } catch (error) {
     console.error('Error verifying token:', error);
     res.status(401).json({ message: 'Invalid token' });
   }
 };
 
-app.post('/register', async (req, res) => {
+app.post('/register', async function (req, res) {
   try {
-    const newPassword = await bcrypt.hash(req.body.password, 10);
+    var hashedPassword = await bcrypt.hash(req.body.password, 10);
     await User.create({
       email: req.body.email,
-      password: newPassword,
+      password: hashedPassword,
     });
     res.json({ status: 'ok' });
   } catch (err) {
@@ -80,98 +74,113 @@ app.post('/register', async (req, res) => {
   }
 });
 
-app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+app.post('/login', async function (req, res) {
+  var email = req.body.email;
+  var password = req.body.password;
 
   try {
-    const user = await User.findOne({ email });
-    console.log(user)
-    console.log(user.email)
-    console.log(email)
-    console.log(password)
+    var user = await User.findOne({ email: email });
     if (!user) {
       return res.json({ status: 'error', error: 'Invalid login' });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-
+    var isPasswordValid = await bcrypt.compare(password, user.password);
     if (isPasswordValid) {
-      const token = jwt.sign({ email: user.email }, 'abc123');
+      var token = jwt.sign({ email: user.email }, 'abc123');
       return res.json({ status: 'ok', user: token });
     } else {
       return res.json({ status: 'error', error: 'Invalid login' });
     }
   } catch (error) {
-    console.error('Error during login:', error);
-    res.status(500).json({ status: 'error', error: 'Internal server error' });
+    console.log('Error during login:', error);
+    return res.status(500).json({ status: 'error', error: 'Internal server error' });
   }
 });
 
-
 // Endpoint to create a new post
-app.post('/posts', authenticateUser, upload.single('file'), (req, res) => {
-  const { title, content } = req.body;
-  const file = req.file;
-  const post = {
-    id: uuidv4(),
-    title,
-    content,
-    file: file ? file.filename : null,
-    userId: req.user._id,
-    date: req.body.date
-  };
+app.post('/posts', authenticateUser, upload.single('file'), async function (req, res) {
+  var title = req.body.title;
+  var content = req.body.content;
+  var file = req.file;
+  var userId = req.user._id;
+  var date = req.body.date;
 
-  Post.create(post)
-    .then(() => {
-      res.sendStatus(201);
-    })
-    .catch((error) => {
-      console.error('Error creating post:', error);
-      res.status(500).json({ message: 'Internal server error' });
+  try {
+    var params = {
+      Bucket: 'YOUR_S3_BUCKET_NAME',
+      Key: uuidv4() + path.extname(file.originalname),
+      Body: file.buffer,
+      ACL: 'public-read',
+    };
+
+    s3.upload(params, async function (err, data) {
+      if (err) {
+        console.error('Error uploading file to S3:', err);
+        res.status(500).json({ message: 'Error uploading file to S3' });
+      } else {
+        var post = {
+          id: uuidv4(),
+          title: title,
+          content: content,
+          file: data.Location,
+          userId: userId,
+          date: date,
+        };
+
+        try {
+          await Post.create(post);
+          res.sendStatus(201);
+        } catch (error) {
+          console.error('Error creating post:', error);
+          res.status(500).json({ message: 'Internal server error' });
+        }
+      }
     });
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    res.status(500).json({ message: 'Error uploading file' });
+  }
 });
 
 // Endpoint to get all posts for a specific user
-app.get('/posts', authenticateUser, (req, res) => {
-  const userId = req.user._id;
-  Post.find({ userId: userId })
-    .then((posts) => {
-      res.json(posts);
-    })
-    .catch((error) => {
-      console.error('Error fetching posts:', error);
-      res.status(500).json({ message: 'Internal server error' });
-    });
+app.get('/posts', authenticateUser, async function (req, res) {
+  var userId = req.user._id;
+  try {
+    var posts = await Post.find({ userId: userId });
+    res.json(posts);
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 });
 
-app.delete('/posts/:postId', authenticateUser, (req, res) => {
-  const postId = req.params.postId;
+app.delete('/posts/:postId', authenticateUser, async function (req, res) {
+  var postId = req.params.postId;
 
-  Post.findOneAndDelete({ _id: postId })
-    .then((deletedPost) => {
-      if (!deletedPost) {
-        return res.status(404).json({ error: 'Post not found' });
-      }
-      return res.status(200).json({ message: 'Post deleted successfully' });
-    })
-    .catch((error) => {
-      console.error('Error deleting post:', error);
-      return res.status(500).json({ error: 'Internal server error' });
-    });
+  try {
+    var deletedPost = await Post.findOneAndDelete({ _id: postId });
+    if (!deletedPost) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+    res.status(200).json({ message: 'Post deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting post:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 // Add a new endpoint to initiate the password reset process
-app.post("/forgot-password", async (req, res) => {
-  const { email } = req.body;
+app.post("/forgot-password", async function (req, res) {
+  var email = req.body.email;
   try {
-    const oldUser = await User.findOne({ email });
+    var oldUser = await User.findOne({ email: email });
     if (!oldUser) {
       return res.json({ status: "User Not Exists!!" });
     }
-    const token = jwt.sign({ email: oldUser.email, id: oldUser._id }, 'abcd1234', {
+    var token = jwt.sign({ email: oldUser.email, id: oldUser._id }, 'abcd1234', {
       expiresIn: "5m",
     });
-    const link = `http://${hostname}/reset-password/${oldUser._id}/${token}`;
+    var link = "http://" + hostname + "/reset-password/" + oldUser._id + "/" + token;
     console.log(link);
     var transporter = nodemailer.createTransport({
       service: "gmail",
@@ -197,113 +206,137 @@ app.post("/forgot-password", async (req, res) => {
       }
     });
     console.log(link);
-  } catch (error) { }
-});
-
-app.get("/reset-password/:id/:token", async (req, res) => {
-  const { id, token } = req.params;
-  console.log(req.params);
-  const oldUser = await User.findOne({ _id: id });
-  if (!oldUser) {
-    return res.json({ status: "User Not Exists!!" });
-  }
-  try {
-    const verify = jwt.verify(token, 'abcd1234');
-    res.render("reset-pass", { email: verify.email, status: "Not Verified" });
   } catch (error) {
     console.log(error);
-    res.send("Not Verified");
+    return res.json({ status: "User Not Exists!!" });
   }
 });
 
-app.post("/reset-password/:id/:token", async (req, res) => {
-  const { id, token } = req.params;
-  const password = req.body.new_password;
+app.get("/reset-password/:id/:token", async function (req, res) {
+  var id = req.params.id;
+  var token = req.params.token;
+  console.log(req.params);
+  try {
+    var oldUser = await User.findOne({ _id: id });
+    if (!oldUser) {
+      return res.json({ status: "User Not Exists!!" });
+    }
+    try {
+      var verify = jwt.verify(token, 'abcd1234');
+      res.render("reset-pass", { email: verify.email, status: "Not Verified" });
+    } catch (error) {
+      console.log(error);
+      res.send("Not Verified");
+    }
+  } catch (error) {
+    console.log(error);
+    return res.json({ status: "User Not Exists!!" });
+  }
+});
+
+app.post("/reset-password/:id/:token", async function (req, res) {
+  var id = req.params.id;
+  var token = req.params.token;
+  var password = req.body.new_password;
   console.log(req.body)
   console.log(req.body.new_password)
   console.log(password)
 
-  const oldUser = await User.findOne({ _id: id });
-  if (!oldUser) {
-    return res.json({ status: "User Not Exists!!" });
-  }
   try {
-    const verify = jwt.verify(token, 'abcd1234');
-    const encryptedPassword = await bcrypt.hash(password, 10);
-    await User.updateOne(
-      {
-        _id: id,
-      },
-      {
-        $set: {
-          password: encryptedPassword,
-        },
-      }
-    );
-
-    res.render("reset-pass", { email: verify.email, status: "verified" });
+    var oldUser = await User.findOne({ _id: id });
+    if (!oldUser) {
+      return res.json({ status: "User Not Exists!!" });
+    }
+    try {
+      var verify = jwt.verify(token, 'abcd1234');
+      bcrypt.hash(password, 10, async function (err, encryptedPassword) {
+        try {
+          await User.updateOne(
+            {
+              _id: id,
+            },
+            {
+              $set: {
+                password: encryptedPassword,
+              },
+            }
+          );
+          res.render("reset-pass", { email: verify.email, status: "verified" });
+        } catch (err) {
+          console.log(err);
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
   } catch (error) {
     console.log(error);
+    return res.json({ status: "User Not Exists!!" });
   }
 });
 
-const Task = mongoose.model('Task', {
+var Task = mongoose.model('Task', {
   task: String,
 });
 
-// Fetch all tasks
-app.get('/tasks', authenticateUser, async (req, res) => {
+// Fetch all tasks for the authenticated user
+app.get('/tasks', authenticateUser, async function (req, res) {
+  var userId = req.user._id;
+
   try {
-    const tasks = await Task.find();
+    var tasks = await Task.find({ userId: userId });
     res.json(tasks);
-  } catch (error) {
-    console.log('Error fetching tasks:', error);
+  } catch (err) {
+    console.log('Error fetching tasks:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// Add a new task
-app.post('/tasks', authenticateUser, async (req, res) => {
-  const { task } = req.body;
+// Add a new task for the authenticated user
+app.post('/tasks', authenticateUser, async function (req, res) {
+  var userId = req.user._id;
+  var task = req.body.task;
 
   try {
-    const newTask = await Task.create({ task });
+    var newTask = await Task.create({ task: task, userId: userId });
     res.status(201).json(newTask);
-  } catch (error) {
-    console.log('Error adding task:', error);
+  } catch (err) {
+    console.log('Error adding task:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// Remove a task
-app.delete('/tasks/:taskId', authenticateUser, async (req, res) => {
-  const { taskId } = req.params;
+// Remove a task for the authenticated user
+app.delete('/tasks/:taskId', authenticateUser, async function (req, res) {
+  var userId = req.user._id;
+  var taskId = req.params.taskId;
 
   try {
-    const deletedTask = await Task.findByIdAndDelete(taskId);
+    var deletedTask = await Task.findOneAndDelete({ _id: taskId, userId: userId });
     if (!deletedTask) {
       return res.status(404).json({ error: 'Task not found' });
     }
     res.json({ message: 'Task deleted successfully' });
-  } catch (error) {
-    console.log('Error removing task:', error);
+  } catch (err) {
+    console.log('Error removing task:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// Update a task
-app.put('/tasks/:taskId', authenticateUser, async (req, res) => {
-  const { taskId } = req.params;
-  const { task } = req.body;
+// Update a task for the authenticated user
+app.put('/tasks/:taskId', authenticateUser, async function (req, res) {
+  var userId = req.user._id;
+  var taskId = req.params.taskId;
+  var task = req.body.task;
 
   try {
-    const updatedTask = await Task.findByIdAndUpdate(taskId, { task }, { new: true });
+    var updatedTask = await Task.findOneAndUpdate({ _id: taskId, userId: userId }, { task: task }, { new: true });
     if (!updatedTask) {
       return res.status(404).json({ error: 'Task not found' });
     }
     res.json(updatedTask);
-  } catch (error) {
-    console.log('Error updating task:', error);
+  } catch (err) {
+    console.log('Error updating task:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

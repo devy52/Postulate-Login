@@ -172,7 +172,7 @@ const PostList = () => {
               key={post.id}
               className="post-card"
             >
-              <p
+              <p className='date'
                 style={{
                   position: 'absolute',
                   top: '12px',
@@ -184,7 +184,7 @@ const PostList = () => {
               >
                 {renderDate(post.date)}
               </p>
-              <h3 style={{ textAlign: 'left' }}>{post.title}</h3>
+              <h3 className="title" style={{ textAlign: 'left' }}>{post.title}</h3>
               {renderMedia(post)}
               <p>{post.content}</p>
               <button onClick={() => handleDeletePost(post._id)} className="dbtn">
