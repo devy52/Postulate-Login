@@ -14,7 +14,7 @@ const PostList = () => {
   const token = localStorage.getItem('token') || '';
 
   useEffect(() => {
-    fetch(`http://${window.location.hostname}/posts`, {
+    fetch(`https://${window.location.hostname}/posts`, {
       headers: {
         'x-access-token': token,
       },
@@ -32,11 +32,11 @@ const PostList = () => {
       const supportedVideoFormats = ['mp4', 'mov', 'avi', 'webm', 'mpeg2'];
 
       if (supportedImageFormats.includes(fileExtension)) {
-        return <img src={`http://${window.location.hostname}/uploads/${post.file}`} alt="Post" />;
+        return <img src={`https://${window.location.hostname}/uploads/${post.file}`} alt="Post" />;
       } else if (supportedVideoFormats.includes(fileExtension)) {
         return (
           <video controls>
-            <source src={`http://${window.location.hostname}/uploads/${post.file}`} type="video/mp4" />
+            <source src={`https://${window.location.hostname}/uploads/${post.file}`} type="video/mp4" />
           </video>
         );
       } else {
@@ -54,7 +54,7 @@ const PostList = () => {
 
   const handleDeletePost = async (postid) => {
     console.log('Delete button clicked');
-    const response = await fetch(`http://${window.location.hostname}/posts/${postid}`, {
+    const response = await fetch(`https://${window.location.hostname}/posts/${postid}`, {
       method: 'DELETE',
       headers: {
         'x-access-token': token,
@@ -84,7 +84,7 @@ const PostList = () => {
       <Helmet>
         <title>Prev. Notes</title>
         <meta name="description" content="Web site created using quarkly.io" />
-        <link rel="shortcut icon" href="http://uploads.quarkly.io/readme/cra/favicon-32x32.ico" type="image/x-icon" />
+        <link rel="shortcut icon" href="https://uploads.quarkly.io/readme/cra/favicon-32x32.ico" type="image/x-icon" />
       </Helmet>
       <Section padding="0px 0 0px 0">
         <Box
@@ -126,7 +126,7 @@ const PostList = () => {
           </List>
         </Box>
       </Section>
-      <Section className="middlesec" padding="80px 0 80px 0" background="url(http://cdn.pixabay.com/photo/2018/11/17/07/10/notebook-3820634_1280.jpg) 0% 0%/cover no-repeat,#EDF2F6" sm-padding="60px 0 60px 0">
+      <Section className="middlesec" padding="80px 0 80px 0" background="url(https://cdn.pixabay.com/photo/2018/11/17/07/10/notebook-3820634_1280.jpg) 0% 0%/cover no-repeat,#EDF2F6" sm-padding="60px 0 60px 0">
         <Box
           width="100%"
           display="flex"
@@ -144,7 +144,7 @@ const PostList = () => {
           </Text>
           {posts.length === 0 && (
             <React.Fragment>
-            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" className='imgnone'><path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM182.4 382.5c-12.4 5.2-26.5-4.1-21.1-16.4c16-36.6 52.4-62.1 94.8-62.1s78.8 25.6 94.8 62.1c5.4 12.3-8.7 21.6-21.1 16.4c-22.4-9.5-47.4-14.8-73.7-14.8s-51.3 5.3-73.7 14.8zM144.4 208a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm192-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg>
+            <svg xmlns="https://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" className='imgnone'><path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zM182.4 382.5c-12.4 5.2-26.5-4.1-21.1-16.4c16-36.6 52.4-62.1 94.8-62.1s78.8 25.6 94.8 62.1c5.4 12.3-8.7 21.6-21.1 16.4c-22.4-9.5-47.4-14.8-73.7-14.8s-51.3 5.3-73.7 14.8zM144.4 208a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm192-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg>
             <Text className="labelnone" margin="0px 0px 16px 0px" font="--headline2" md-text-align="center" sm-font="normal 700 32px/1.2 &quot;Source Sans Pro&quot;, sans-serif" text-align="center">
               Nothin Here
             </Text>
