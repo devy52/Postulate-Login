@@ -13,7 +13,7 @@ export default (() => {
   const token = localStorage.getItem('token') || '';
 
   useEffect(() => {
-    fetch(`http://${window.location.hostname}/posts`, {
+    fetch(`https://${window.location.hostname}/posts`, {
       headers: {
         'x-access-token': token,
       },
@@ -58,7 +58,7 @@ export default (() => {
 
     const token = localStorage.getItem('token')
 
-    const response = await fetch(`http://${window.location.hostname}/posts`, {
+    const response = await fetch(`https://${window.location.hostname}/posts`, {
       method: 'POST',
       body: formData,
       headers: {
@@ -85,7 +85,7 @@ export default (() => {
       <Helmet>
         <title>Create</title>
         <meta name={"description"} content={"Web site created using quarkly.io"} />
-        <link rel={"shortcut icon"} href={"http://uploads.quarkly.io/readme/cra/favicon-32x32.ico"} type={"image/x-icon"} />
+        <link rel={"shortcut icon"} href={"https://uploads.quarkly.io/readme/cra/favicon-32x32.ico"} type={"image/x-icon"} />
       </Helmet>
       <Section padding="0px 0 0px 0">
         <Box
@@ -127,7 +127,7 @@ export default (() => {
           </List>
         </Box>
       </Section>
-      <Section padding="100px 0 100px 0" background="url(http://cdn.pixabay.com/photo/2018/11/17/07/10/notebook-3820634_1280.jpg) 0% 0%/cover no-repeat,#EDF2F6" sm-padding="60px 0 60px 0">
+      <Section padding="100px 0 100px 0" background="url(https://cdn.pixabay.com/photo/2018/11/17/07/10/notebook-3820634_1280.jpg) 0% 0%/cover no-repeat,#EDF2F6" sm-padding="60px 0 60px 0">
         <Box display="flex" justify-content="center">
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <Box
