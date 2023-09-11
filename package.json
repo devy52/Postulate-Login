@@ -36,7 +36,7 @@
     },
     "scripts": {
         "start": "set HTTPS=true&&set SSL_CRT_FILE=./postulate-login.pages.dev.pem&&set SSL_KEY_FILE=./postulate-login.pages.dev-key.pem&&react-scripts start",
-        "build": "react-scripts build",
+        "build": "set HTTPS=true&&set SSL_CRT_FILE=./postulate-login.pages.dev.pem&&set SSL_KEY_FILE=./postulate-login.pages.dev-key.pem&&react-scripts build",
         "build:ci": "cross-env CI=false npm run build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
